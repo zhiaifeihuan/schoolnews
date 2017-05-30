@@ -61,10 +61,10 @@ public class UserServer extends Server{
             session.setAttribute("HASLOGIN",username);
             //response.getWriter().println(session.getAttribute("HASLOGIN"));
             if(rs.getInt(1) ==1){
-                this.makeResponse(true, "Login Success!555", null);  
+                this.makeResponse(true, "Login Success!aaa", null);  
             }
             else{
-                this.makeResponse(false,"Login Failed!444",null);
+                this.makeResponse(false,"Login Failed!test",null);
             }
                
                
