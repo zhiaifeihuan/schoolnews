@@ -64,7 +64,7 @@ public class UserServer extends Server{
                 this.makeResponse(true, "登录成功啦", null);  
             }
             else{
-                this.makeResponse(false,"Login Failed!测试中文",null);
+                this.makeResponse(false,"登录失败，用户名或密码不正确",null);
             }
                
                
@@ -98,7 +98,7 @@ public class UserServer extends Server{
                 
                  if(username.length() !=0 && nickname.length() != 0 && password.length() != 0){
                       int rs = st.executeUpdate();
-                      this.makeResponse(true,"Registe Success!465",null);
+                      this.makeResponse(true,"Registe Success!",null);
                  } else {
                       this.makeResponse(false, "Can't be empty!", null);
                  }
@@ -181,11 +181,14 @@ public class UserServer extends Server{
             String major = rs.getString("major");
             String phone = rs.getString("phone");
             response.getWriter().println(phone);
+            data.put("gender", gender);
             this.makeResponse(true, "GetMessage Success!", data);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JSONException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
