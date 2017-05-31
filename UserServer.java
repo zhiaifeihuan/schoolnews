@@ -156,7 +156,7 @@ public class UserServer extends Server{
     }
     
     private void check() {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true);
         Object curusername = session.getAttribute("HASLOGIN");
         if(curusername == null){
             this.makeResponse(false, "Please Login First", null);
