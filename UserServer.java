@@ -57,11 +57,12 @@ public class UserServer extends Server{
             ResultSet rs = st.executeQuery();
             rs.next();
             String username = data.getString("username");
-            HttpSession session = request.getSession();
-            session.setAttribute("HASLOGIN",username);
+            
             //response.getWriter().println(session.getAttribute("HASLOGIN"));
             if(rs.getInt(1) ==1){
-                this.makeResponse(true, "登录成功啦", null);  
+                this.makeResponse(true, "登录成功啦", null); 
+                HttpSession session = request.getSession();
+                session.setAttribute("HASLOGIN",username);
             }
             else{
                 this.makeResponse(false,"登录失败，用户名或密码不正确",null);
