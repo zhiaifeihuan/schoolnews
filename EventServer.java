@@ -30,6 +30,9 @@ public class EventServer extends Server {
         if(requestType.equalsIgnoreCase("EVENT_UPLOAD")){
             eventupload();
         }
+        if(requestType.equalsIgnoreCase("EVENT_GETMESSAGE")){
+            getmessage();
+        }
     }
     private void eventupload(){
         try{
@@ -50,6 +53,35 @@ public class EventServer extends Server {
          } catch (JSONException ex) {
              Logger.getLogger(EventServer.class.getName()).log(Level.SEVERE, null, ex);
          } 
+    }
+    
+    private void getmessage(){
+        try{
+            HttpSession session = request.getSession(false);
+            String curusername = (String) session.getAttribute("HASLOGIN");
+            
+            String sql = "select happentime,event,positionx,positiony from sn_event where username = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+           
+            st.setString(1, curusername);
+            ResultSet rs = st.executeQuery();
+            
+            while(rs.next()){
+            String happentime = rs.getString("happentime");
+            String event = rs.getString("event");
+            String positionx = rs.getString("positionx");
+            String positiony = rs.getString("positiony");
+            data.put("happentime", happentime);
+            data.put("event", event);
+            data.put("positionx", positionx);
+            data.put("positiony", positiony);
+            this.makeResponse(true, "GetMessage Success!", data);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JSONException ex) {
+            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

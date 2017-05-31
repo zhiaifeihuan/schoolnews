@@ -45,6 +45,9 @@ public class UserServer extends Server{
         if(requestType.equalsIgnoreCase("USER_GETMESSAGE")){
             getmessage();
         }
+        if(requestType.equalsIgnoreCase("USER_QUIT")){
+            quit();
+        }
     }
 
     private void login() {
@@ -85,7 +88,7 @@ public class UserServer extends Server{
             ResultSet rs1 = st1.executeQuery();
             rs1.next();
             if(rs1.getInt(1) == 1){
-                this.makeResponse(false, "Registe Failed!123", null);
+                this.makeResponse(false, "Registe Failed!", null);
             }else{
                 
                  String sql = "insert into sn_user(username,nickname,password) values (?,?,md5(?))";
@@ -153,7 +156,7 @@ public class UserServer extends Server{
     }
     
     private void check() {
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession(false);
         Object curusername = session.getAttribute("HASLOGIN");
         if(curusername == null){
             this.makeResponse(false, "Please Login First", null);
@@ -181,16 +184,26 @@ public class UserServer extends Server{
             String identity = rs.getString("identity");
             String major = rs.getString("major");
             String phone = rs.getString("phone");
-            response.getWriter().println(phone);
             data.put("gender", gender);
+            data.put("introduce", introduce);
+            data.put("identity", identity);
+            data.put("major", major);
+            data.put("phone", phone);
             this.makeResponse(true, "GetMessage Success!", data);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void quit(){
+       
+            
+            HttpSession session = request.getSession(false); 
+            
+            session.removeAttribute("HASLOGIN");
+            this.makeResponse(true,"登出成功",null); 
     }
 }

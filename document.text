@@ -1,0 +1,176 @@
+makeResponse 格式：
+responseObj.put("success", success);   boolean
+responseObj.put("message", message);   string
+responseObj.put("data",data);          JSONObject
+
+注册功能：
+请求　url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"USER_REGISTE",
+            data:{
+                "username":$("#username").val(),
+                "password":$("#username").val(),
+             	"nickname":$("#nickname").val()
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"success":true,"message":"Registe Success!"} 注册成功
+{"success":false,"message":"Registe Failed!"} 注册失败，用户名或昵称已存在
+{"success":false,"message":"Can't be empty!"} 注册失败，用户名或昵称或密码不能为空
+登录功能：
+请求　url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"USER_LOGIN",
+            data:{
+                "username":$("#username").val(),
+                "password":$("#username").val()
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"success":true,"message":"Login Success!"} 登录成功
+{"success":false,"message":"Login Failed!"} 登录失败，请先注册
+编辑个人信息：
+请求　url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"USER_LOGIN",
+            data:{
+                "gender":$("#gender").val(),  性别
+                "introduce":$("#introduce").val(),　一句话的介绍　如"我是一名Giser" 
+		"identify":$("#identify").val(),  身份　如“学生/老师”
+		"major":$("#major").val(),　　专业
+		"phone":$("#phone").val()　　电话
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"success":true,"message":"UpLoad Success!"} 上传信息成功
+{"success":false,"message":"Alter Success!"} 修改信息成功
+上传事件:
+请求　url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"EVENT_UPLOAD",
+            data:{
+                "event":$("#event").val(),  
+                "happentime":$("#happentime").val(),　字符串格式：2012-12-03 03:23:13
+		"positionx":$("#positionx").val(),  
+		"positiony":$("#positiony").val()
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"success":true,"message":"UpLoad Success!"} 上传事件成功
+
+判断是否登录:
+请求　url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"USER_CHECK",
+            data:{
+                
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"success":true,"message":"HASLOGIN"} 已登录成功
+{"success":false,"message":"Please Login First"} 未登录
+
+显示个人信息：
+请求   url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"USER_GETMESSAGE",
+            data:{
+                
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"data":{"gender":"123","major":"12","phone":"12","introduce":"12","identity":"12"},"success":true,"message":"GetMessage Success!"}
+
+
+显示事件信息：
+请求   url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"EVENT_GETMESSAGE",
+            data:{
+                
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"data":{"happentime":"2012-12-12 21:20:20","positiony":"12","event":"12","positionx":"12"},"success":true,"message":"GetMessage Success!"}
+登出功能：
+请求     url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"USER_QUIT",
+            data:{
+                
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"success":true,"message":"登出成功"}
