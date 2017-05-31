@@ -160,7 +160,7 @@ public class UserServer extends Server{
         } else {
             this.makeResponse(true, "HASLOGIN", null);
         }
-        session.invalidate();
+       
        } 
     
     
