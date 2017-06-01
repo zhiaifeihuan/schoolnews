@@ -1,6 +1,6 @@
 /**
  * 包装jquery的ajax请求，
- * @param {type} opts 
+ * @param {type} opts
  * {
  *      url: "",
  *      params: {},
