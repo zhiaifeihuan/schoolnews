@@ -47,14 +47,14 @@ Response:
 Response:
 {"success":true,"message":"Login Success!"} 登录成功
 {"success":false,"message":"Login Failed!"} 登录失败，请先注册
-编辑个人信息：
+编辑个人信息并上传：
 请求　url:"DesktopService",
           method:"POST",
         　data:
           {
             request:params:
 　　　　　　 {
-            type:"USER_LOGIN",
+            type:"USER_UPLOAD",
             data:{
                 "gender":$("#gender").val(),  性别
                 "introduce":$("#introduce").val(),　一句话的介绍　如"我是一名Giser" 
@@ -70,20 +70,21 @@ Response:
           }
 Response:
 {"success":true,"message":"UpLoad Success!"} 上传信息成功
-{"success":false,"message":"Alter Success!"} 修改信息成功
-上传事件:
+
+修改个人信息：
 请求　url:"DesktopService",
           method:"POST",
         　data:
           {
             request:params:
 　　　　　　 {
-            type:"EVENT_UPLOAD",
+            type:"USER_ALTER",
             data:{
-                "event":$("#event").val(),  
-                "happentime":$("#happentime").val(),　字符串格式：2012-12-03 03:23:13
-		"positionx":$("#positionx").val(),  
-		"positiony":$("#positiony").val()
+                "gender":$("#gender").val(),  性别
+                "introduce":$("#introduce").val(),　一句话的介绍　如"我是一名Giser" 
+		"identify":$("#identify").val(),  身份　如“学生/老师”
+		"major":$("#major").val(),　　专业
+		"phone":$("#phone").val()　　电话
             　　　}
         　　 }
            },
@@ -92,7 +93,71 @@ Response:
             me.close();
           }
 Response:
-{"success":true,"message":"UpLoad Success!"} 上传事件成功
+{"success":true,"message":"Alter Success!"} 修改信息成功
+上传事件(第一步):
+请求　url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"EVENT_UPLOAD1",
+            data:{
+                
+                 "title" :$("#title").val() 
+                "happentime":$("#happentime").val()　字符串格式：2012-12-03 03:23:13
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"success":true,"message":"标题和时间上传成功!"} 
+
+上传事件(第二步):
+请求　url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"EVENT_UPLOAD2",
+            data:{
+                "event":$("#event").val(),
+                "longitude" :$("#longitude").val(),
+                "latitude":$("#latitude").val()
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"success":true,"message":"事件上传成功!"} 
+
+事件登出功能（在确认提交上传的事件后，要执行事件登出功能，注销eventsession的EVENT(eventid)属性）
+请求　url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"EVENT_QUIT",
+            data:{
+                
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"success":true,"message":"事件编辑结束"} 
+
 
 判断是否登录:
 请求　url:"DesktopService",
@@ -136,7 +201,7 @@ Response:
 {"data":{"gender":"123","major":"12","phone":"12","introduce":"12","identity":"12"},"success":true,"message":"GetMessage Success!"}
 
 
-显示事件信息：
+显示事件信息：(有问题，先不要用)
 请求   url:"DesktopService",
           method:"POST",
         　data:

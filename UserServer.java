@@ -36,9 +36,13 @@ public class UserServer extends Server{
         if(requestType.equalsIgnoreCase("USER_REGISTE")){
             registe();
         }
-        if(requestType.equalsIgnoreCase("USER_PSMESSAGE")){
-            psmessage();
+        if(requestType.equalsIgnoreCase("USER_UPLOAD")){
+            upload();
         }
+        if(requestType.equalsIgnoreCase("USER_ALTER")){
+            alter();
+        }
+        
         if(requestType.equalsIgnoreCase("USER_CHECK")){
             check();
         }
@@ -116,27 +120,11 @@ public class UserServer extends Server{
         }
     }
     
-    private void psmessage(){
+    private void upload(){
         try{
              HttpSession session = request.getSession(false);
              String curusername = (String) session.getAttribute("HASLOGIN");
-             String sql1 = "select count(1) from sn_personmessage where username = ?";
-             PreparedStatement st1 = connection.prepareStatement(sql1);
-             st1.setString(1, curusername);
-             ResultSet rs1 = st1.executeQuery();
-             rs1.next();
-             if(rs1.getInt(1) == 1){
-                String sql2 = "update sn_personmessage set gender = ?,introduce = ?,identity = ?,major = ?,phone = ? where username = ?";
-                PreparedStatement st2 = connection.prepareStatement(sql2);
-                st2.setString(1, data.getString("gender"));
-                st2.setString(2, data.getString("introduce"));
-                st2.setString(3, data.getString("identity"));
-                st2.setString(4, data.getString("major"));
-                st2.setString(5, data.getString("phone"));
-                st2.setString(6, curusername);
-                int rs = st2.executeUpdate();
-                this.makeResponse(false, "Alter Success!", null);
-            }else{
+             
              String sql = "insert into sn_personmessage(username,gender,introduce,identity,major,phone) values (?,?,?,?,?,?)";
              PreparedStatement st = connection.prepareStatement(sql);
              st.setString(1, curusername);
@@ -147,7 +135,7 @@ public class UserServer extends Server{
              st.setString(6, data.getString("phone"));
              int rs = st.executeUpdate();
              this.makeResponse(true,"UpLoad Success!",null);
-             }
+             
         } catch (SQLException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {
@@ -205,5 +193,26 @@ public class UserServer extends Server{
             
             session.removeAttribute("HASLOGIN");
             this.makeResponse(true,"登出成功",null); 
+    }
+    
+    private void alter(){
+        try{
+             HttpSession session = request.getSession(false);
+             String curusername = (String) session.getAttribute("HASLOGIN");
+             String sql = "update sn_personmessage set gender = ?,introduce = ?,identity = ?,major = ?,phone = ? where username = ?";
+             PreparedStatement st = connection.prepareStatement(sql);
+             st.setString(1, data.getString("gender"));
+             st.setString(2, data.getString("introduce"));
+             st.setString(3, data.getString("identity"));
+             st.setString(4, data.getString("major"));
+             st.setString(5, data.getString("phone"));
+             st.setString(6, curusername);
+             int rs = st.executeUpdate();
+             this.makeResponse(true, "Alter Success!", null);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JSONException ex) {
+            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
