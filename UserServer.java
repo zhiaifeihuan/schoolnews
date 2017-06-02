@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,6 +52,9 @@ public class UserServer extends Server{
         }
         if(requestType.equalsIgnoreCase("USER_QUIT")){
             quit();
+        }
+        if(requestType.equalsIgnoreCase("USER_GETEVENT")){
+            getevent();
         }
     }
 
@@ -166,7 +170,7 @@ public class UserServer extends Server{
             st.setString(1, curusername);
             ResultSet rs = st.executeQuery();
             
-            while(rs.next()){
+            rs.next();
             String gender = rs.getString("gender");
             String introduce = rs.getString("introduce");
             String identity = rs.getString("identity");
@@ -178,7 +182,7 @@ public class UserServer extends Server{
             data.put("major", major);
             data.put("phone", phone);
             this.makeResponse(true, "GetMessage Success!", data);
-            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {
@@ -209,6 +213,49 @@ public class UserServer extends Server{
              st.setString(6, curusername);
              int rs = st.executeUpdate();
              this.makeResponse(true, "Alter Success!", null);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JSONException ex) {
+            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void getevent() {
+         try{
+            HttpSession session = request.getSession(false);
+            String curusername = (String) session.getAttribute("HASLOGIN");
+            
+            String sql = "select happentime,event,title ,longitude,latitude from sn_event where username = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, curusername);
+            ResultSet rs = st.executeQuery();
+
+            JSONArray array = new JSONArray(); 
+           
+          
+            
+            while(rs.next()){
+            JSONObject data1 = new JSONObject();
+            String happentime = rs.getString(1);
+            String event = rs.getString(2);
+            String title = rs.getString(3);
+            String longitude = rs.getString(4);
+            String latitude = rs.getString(5);
+            data1.put("happentime", happentime);
+            data1.put("event", event);
+            data1.put("longitude", longitude);
+            data1.put("latitude", latitude);
+            data1.put("title", title);
+            
+            
+            array.put(data1);
+            
+            }
+
+            responseObj.put("data", array);
+            responseObj.put("success", true);
+            responseObj.put("message", "事件获取成功!");
+            
         } catch (SQLException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {

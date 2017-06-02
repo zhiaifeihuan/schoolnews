@@ -57,7 +57,7 @@ public class Server {
         this.requestObj = obj;
         try {
             requestType = requestObj.getString("type");
-            data = requestObj.getJSONObject("data");
+            data = requestObj.getJSONObject("data"); 
         } catch (JSONException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }

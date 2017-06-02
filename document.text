@@ -94,18 +94,21 @@ Response:
           }
 Response:
 {"success":true,"message":"Alter Success!"} 修改信息成功
-上传事件(第一步):
+上传事件:
 请求　url:"DesktopService",
           method:"POST",
         　data:
           {
             request:params:
 　　　　　　 {
-            type:"EVENT_UPLOAD1",
+            type:"EVENT_UPLOAD",
             data:{
                 
                  "title" :$("#title").val() 
-                "happentime":$("#happentime").val()　字符串格式：2012-12-03 03:23:13
+                 "happentime":$("#happentime").val()　字符串格式：2012-12-03 03:23:13
+		 "event": $("#event").val(),
+                 "longitude": $("#longitude").val(),
+                 "latitude": $("#latitude").val()
             　　　}
         　　 }
            },
@@ -114,20 +117,23 @@ Response:
             me.close();
           }
 Response:
-{"success":true,"message":"标题和时间上传成功!"} 
-
-上传事件(第二步):
+{"data":{"eventid":"93"},"success":true,"message":"事件上传成功!"}   
+ 
+修改事件:
 请求　url:"DesktopService",
           method:"POST",
         　data:
           {
             request:params:
 　　　　　　 {
-            type:"EVENT_UPLOAD2",
+            type:"EVENT_ALTER",
             data:{
-                "event":$("#event").val(),
-                "longitude" :$("#longitude").val(),
-                "latitude":$("#latitude").val()
+                 "eventid":$("#eventid").val(),
+                 "title" :$("#title").val() 
+                 "happentime":$("#happentime").val()　字符串格式：2012-12-03 03:23:13
+		 "event": $("#event").val(),
+                 "longitude": $("#longitude").val(),
+                 "latitude": $("#latitude").val()
             　　　}
         　　 }
            },
@@ -136,28 +142,7 @@ Response:
             me.close();
           }
 Response:
-{"success":true,"message":"事件上传成功!"} 
-
-事件登出功能（在确认提交上传的事件后，要执行事件登出功能，注销eventsession的EVENT(eventid)属性）
-请求　url:"DesktopService",
-          method:"POST",
-        　data:
-          {
-            request:params:
-　　　　　　 {
-            type:"EVENT_QUIT",
-            data:{
-                
-            　　　}
-        　　 }
-           },
-          success:function(json)
-          {
-            me.close();
-          }
-Response:
-{"success":true,"message":"事件编辑结束"} 
-
+{"success":true,"message":"Alter Success!"}
 
 判断是否登录:
 请求　url:"DesktopService",
@@ -201,7 +186,7 @@ Response:
 {"data":{"gender":"123","major":"12","phone":"12","introduce":"12","identity":"12"},"success":true,"message":"GetMessage Success!"}
 
 
-显示事件信息：(有问题，先不要用)
+显示单个事件信息：
 请求   url:"DesktopService",
           method:"POST",
         　data:
@@ -210,7 +195,7 @@ Response:
 　　　　　　 {
             type:"EVENT_GETMESSAGE",
             data:{
-                
+                   "eventid":$("#eventid").val()
             　　　}
         　　 }
            },
@@ -219,7 +204,28 @@ Response:
             me.close();
           }
 Response:
-{"data":{"happentime":"2012-12-12 21:20:20","positiony":"12","event":"12","positionx":"12"},"success":true,"message":"GetMessage Success!"}
+{"data":{"happentime":"2012-12-12 02:02:02","eventid":"91","latitude":"12","event":"1","title":"12222222","longitude":"1"},"success":true,"message":"事件提取成功!"}
+
+显示某用户所有事件信息：
+请求   url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"USER_GETEVENT",
+            data:{
+
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"data":[{"happentime":"2012-12-12 02:02:02","latitude":"12","event":"123456","title":"12","longitude":"12"},{"happentime":"2012-12-12 02:02:02","latitude":"12","event":"1","title":"12222222","longitude":"1"}],"success":true,"message":"事件获取成功!"}
+注：data是JSONArray，里面的每一组数据是JSONObject，每一组数据中的key和value是字符串
 登出功能：
 请求     url:"DesktopService",
           method:"POST",
@@ -239,3 +245,25 @@ Response:
           }
 Response:
 {"success":true,"message":"登出成功"}
+
+删除事件功能：
+请求     url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"EVENT_DELETE",
+            data:{
+                  eventid:$("#eventid").val()
+            　　　}
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"success":true,"message":"事件删除成功!"}
+
+
