@@ -20,19 +20,21 @@ export default function (opts) {
       },
       method: 'POST',
       success: function (data) {
-        var json = JSON.parse(data)
-        if (json.success && opts.success && typeof opts.success === 'function') {
-          opts.success(json)
-        } else if (!json.success && opts.failure && typeof opts.failure === 'function') {
-          opts.failure(json)
-        } else {
-          alert(json.message)
+        if (data !== '') {
+          var json = JSON.parse(data)
+          if (json.success && opts.success && typeof opts.success === 'function') {
+            opts.success(json)
+          } else if (!json.success && opts.failure && typeof opts.failure === 'function') {
+            opts.failure(json)
+          } else {
+            alert(json.message)
+          }
+          resolve('请求成功,返回不为空')
         }
-        resolve('aaa')
+        resolve('请求成功，但返回为空')
       },
       error: function (data) {
-        alert('network error!')
-        reject('asd')
+        reject('请求失败,请检查你的网络连接')
       }
     })
   })
