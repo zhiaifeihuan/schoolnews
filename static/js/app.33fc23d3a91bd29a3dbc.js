@@ -6,7 +6,12 @@ webpackJsonp([1],{
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "background"
-  }, [_c('keep-alive', [_c('router-view')], 1)], 1)
+  }, [_c('keep-alive', [_c('transition', {
+    attrs: {
+      "name": "slide",
+      "mode": "in-out"
+    }
+  }, [_c('router-view')], 1)], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -2709,6 +2714,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           longitude: this.event_location.lng,
           latitude: this.event_location.lat
         };
+      } else if (type === 'EVENT_GETMESSAGE') {
+        return {};
       } else {
         return {};
       }
@@ -2718,6 +2725,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mavonEditor: __WEBPACK_IMPORTED_MODULE_1_mavon_editor__["mavonEditor"]
   },
   methods: {
+    sync: function sync(src, html) {
+      this.value = html;
+    },
     upload_event: function upload_event() {
       var _this2 = this;
 
@@ -2861,6 +2871,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     sync: function sync(e) {
       this.position.center = e.target.getCenter();
     },
+    synczoom: function synczoom(e) {
+      this.position.zoom = e.target.getZoom();
+    },
     enter: function enter(target) {
       var _this = this;
 
@@ -2877,12 +2890,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     create_new_event: function create_new_event() {
       var _this2 = this;
 
-      if (!this.$store.state.haslogin) {
+      if (this.$store.state.haslogin) {
         this.$swal({
           type: 'warning',
           text: '请先登录再进行操作'
         });
-      } else if (!this.editing) {
+      } else if (!this.editing && this.centerlabel === false) {
         this.$swal.queue([{
           progressSteps: ['1', '2'],
           title: '第一步',
@@ -2922,6 +2935,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     get_pos: function get_pos(event) {
+      console.log(event.point);
       this.$router.push({
         name: 'edit',
         params: {
@@ -2932,6 +2946,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$store.commit('startedit');
       this.centerlabel = false;
       this.tips = true;
+    },
+    show_event: function show_event(event) {
+      this.$swal({
+        width: 1500,
+        confirmButtonText: '看完了',
+        allowOutsideClick: false,
+        html: '<h2>体测</h2> <p>早上六点半醒来，上次这个点起床的时候，大清还在。<br><br /> 八点竟然和舍友一起去八食堂吃早饭，这个场景，简直活在梦里。不过头还是很晕，走楼梯都感觉晃来晃去的。<br></p> <p>回来看了一会奇才大战凯尔特人，可能是看多了勇士的球，总觉得缺了点什么。女票找了熬夜有害论的证据来强制要求我早睡。我也有点怂了。这不我现在定下规矩，十二点开始写blog,写完就睡。</p> <p>十点的时候就感觉头晕，都不知道下午能不能跑完全程，然后就又上去睡觉了。这一睡就是下午两点半才起，不过这一觉真的是睡的我神采飞扬眉吐气定神闲。就很开心的吃了半碗皮蛋瘦肉粥就去体测了。</p> <h3>立定跳远</h3> <!--- more ---> <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=5345923&auto=1&height=66"></iframe> <p>第一个项目，差点来不及，尼玛都要到鸟巢了发现校园卡没带，顶着烈日又跑回去拿，心疼自己像个ZZ。不过跳的还行，2.50M。大部分男生也差不多这个水平，除了一个老崔，这好家伙快三米了都。</p> <h3>引体向上</h3> <p>这个引体向上老师很严格，还要求手腕必须伸直，还好我一直以来都是有按标准来的。不过就是心疼了我的几个同学，其中一个说练了半个月，已经有成效了，没想到练得是没伸直手臂的版本，又遇上这么个老师，结果他做的时候，老师计数:“1,2,2,2,3。“很无奈只能放弃了。然后是我们班上的一个大神，看着瘦小，肌肉比谁都发达，听他舍友说他肌肉松弛状态下都是各种棱角，体重又轻。然后就开始了他的表演，一连做了二十几个标准的不费劲。老师都很惊讶，叫他不要做了，已经满分了。然后就是我了，我这个大水比，太久没练了，做了7个就不行了。</p> <h2>50米</h2> <p>其实很不想跑50米，今天本来就有点头晕，就感觉有东西一直跳，然后也没用全力跑，测了个7.1S，应该是表的误差，我估计实际成绩应该是7.3S左右。</p> <h2>1000米</h2> <p>起跑前还有个老师给我们做指导，首先就给我们提了个要求，可以跑得慢，但跑完必须要能活着回去。然后给我们讲了一大堆跑路哦不对跑步的要领。最后总结就是：慢点跑。别说还真挺管用，今天跑完1000米，虽然成绩是历史最差，但是状态是历史最好了，带病上场，跑完还能活蹦乱跳的。我从初中到大学的1000米成绩变化趋势是这样的：<br /> <img src="http://blog.edwarddd.cn/hexo-blog/img/1000m.png" alt="" /></p> <h2>下馆子</h2> <p>今天是老崔的生日啊，哥几个肯定是要聚在一起吹吹比的，他为了和我们一起下馆子，都没和他女票一起过，东北真性情老爷们。</p> <p>体测完他和去年一样吐了一地胆汁，果然还是不能跑太猛，然后被搀扶着回来，休息一会后我们就出发了。去了一家以前去过的湘菜馆，味道很不错，然后就开始吹牛逼，一群男的吹起来，那可是天文地理无所不谈，从运动场聊到秦始皇，从最近的黑客事件聊到FBI。吹到饭店打烊才慢慢离开。路上经过老崔曾经说过的世界上最好喝的奶茶店，可惜人太挤，就在隔壁一家没人的奶茶店买了今天的污点，最难喝的奶茶店。回去也不愿意走寻常路，还得从邻居学校的学生公寓穿行而回。那一路上继续谈笑风生，纵观人生百态，我很多地方还是too young too simple。回到宿舍大家还一起吃了他的女友蛋糕，哈哈，我心里在暗喜上次我女票上次给我的黑森林蛋糕不知道比这个好吃到哪里去了。</p> <h2>关于流水账</h2> <p>写博客的时候感觉有点力不从心，像小学生作文，还是要多读点书，肚子里有点墨水，写出来的才不至于这么naive把。<br><br /> 突然发现这篇文章好像膜的有点过分了，希望不会查水表~~~~(&gt;_&lt;)~~~~</p>'
+      });
     }
   },
   components: {
@@ -3538,11 +3560,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('transition', {
-    attrs: {
-      "name": "tantan"
-    }
-  }, [_c('div', {
+  return _c('div', {
     attrs: {
       "id": "editor"
     }
@@ -3550,12 +3568,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "height": "100%"
     },
-    model: {
-      value: (_vm.value),
-      callback: function($$v) {
-        _vm.value = $$v
-      },
-      expression: "value"
+    on: {
+      "change": _vm.sync
     }
   }), _vm._v(" "), _c('button', {
     staticClass: "btn btn-success",
@@ -3567,7 +3581,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.stopedit
     }
-  }, [_vm._v("结束编辑")])], 1)])
+  }, [_vm._v("结束编辑")])], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -3589,11 +3603,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('transition', {
-    attrs: {
-      "name": "aa"
-    }
-  }, [_c('div', [_c('nav', {
+  return _c('div', [_c('nav', {
     staticClass: "nav nav-default navbar-fixed-top maptab col-md-4 col-md-offset-4"
   }, [_c('div', {
     staticClass: "container"
@@ -3682,7 +3692,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "zoom": _vm.position.zoom
     },
     on: {
-      "moving": _vm.sync
+      "zoomend": _vm.synczoom,
+      "moveend": _vm.sync
     }
   }, [_c('bm-navigation', {
     attrs: {
@@ -3708,7 +3719,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "show": _vm.tips
     }
-  }, [_vm._v("拖动我选择地点，右键点我确认")])], 1) : _vm._e(), _vm._v(" "), _c('input', {
+  }, [_vm._v("拖动我选择地点，右键点我确认")])], 1) : _vm._e(), _vm._v(" "), _c('bm-marker', {
+    attrs: {
+      "position": _vm.position.center,
+      "offset": {
+        width: 0,
+        height: 12.5
+      }
+    },
+    on: {
+      "click": _vm.show_event
+    }
+  }, [_c('bm-info-window', {
+    attrs: {
+      "show": true
+    }
+  }, [_vm._v("点击显示此处的事件，测试文章")])], 1), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -3774,7 +3800,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.$forceUpdate()
       }
     }
-  })], 1)], 1)])
+  })], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -3797,4 +3823,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 },[42]);
-//# sourceMappingURL=app.477eed7a935a272ba565.js.map
+//# sourceMappingURL=app.33fc23d3a91bd29a3dbc.js.map
