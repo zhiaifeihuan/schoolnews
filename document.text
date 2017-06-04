@@ -259,7 +259,7 @@ Response:
 　　　　　　 {
             type:"EVENT_INIT",
             data:{
-                  happentime1:$("#happentime1").val(),    开始时间
+                  happentime1:$("#happentime1").val(),    开始时间  如2012-02-02 不需要时间，默认00:00:00
                   happentime2:$("#happentime2").val()     结束时间
             　　　}                                              
         　　 }
