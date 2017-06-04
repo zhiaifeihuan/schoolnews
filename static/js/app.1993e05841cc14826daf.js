@@ -2899,7 +2899,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       c: {
         x: 0,
-        y: 160
+        y: 200
       },
       start: { x: 0, y: 0 },
       width: ''
@@ -2913,7 +2913,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   computed: {
     contentPosition: function contentPosition() {
-      var dy = this.c.y - 160;
+      var dy = this.c.y - 200;
       var dampen = dy > 0 ? 2 : 4;
       return {
         transform: 'translate3d(0,' + dy / dampen + 'px,0)'
@@ -2923,7 +2923,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return this.$store.state.show_currentevent;
     },
     headerPath: function headerPath() {
-      return 'M0,0 L' + this.width + ',0 L' + this.width + ',160 ' + 'Q' + this.c.x + ',' + this.c.y + ' 0,160';
+      return 'M0,0 L' + this.width + ',0 L' + this.width + ',200 ' + 'Q' + this.c.x + ',' + this.c.y + ' 0,200';
     }
   },
   methods: {
@@ -2940,7 +2940,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         var dy = e.pageY - this.start.y;
         var dampen = dy > 0 ? 1.5 : 4;
-        this.c.y = 160 + dy / dampen;
+        this.c.y = 200 + dy / dampen;
       }
     },
     stopDrag: function stopDrag() {
@@ -2948,7 +2948,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.dragging = false;
         __WEBPACK_IMPORTED_MODULE_0_dynamics_js___default.a.animate(this.c, {
           x: this.width / 2,
-          y: 160
+          y: 200
         }, {
           type: __WEBPACK_IMPORTED_MODULE_0_dynamics_js___default.a.spring,
           duration: 700,
@@ -4112,4 +4112,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]),[43]);
-//# sourceMappingURL=app.f0044517ff478940f630.js.map
+//# sourceMappingURL=app.1993e05841cc14826daf.js.map
