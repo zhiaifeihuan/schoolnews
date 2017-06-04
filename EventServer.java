@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,12 +41,63 @@ public class EventServer extends Server {
         if(requestType.equalsIgnoreCase("EVENT_DELETE")){
             delete();
         }
+        if(requestType.equalsIgnoreCase("EVENT_INIT")){
+            eventinit();
+        }
        
+    }
+    
+    private void eventinit(){
+       try{
+           String sql = "select title,happentime,longitude,latitude,eventid from sn_event where happentime::varchar < ? and happentime::varchar > ?";
+           PreparedStatement st = connection.prepareStatement(sql); 
+           
+//           Timestamp time = Timestamp.valueOf(data.getString("happentime1"));
+//            response.getWriter().println(time);
+//           st.setTimestamp(1, time);
+          
+//           Timestamp time1 = Timestamp.valueOf(data.getString("happentime2"));
+//           st.setTimestamp(1, time1);
+//           response.getWriter().println(time1);
+           st.setString(1, data.getString("happentime2"));
+           st.setString(2, data.getString("happentime1"));
+           ResultSet rs = st.executeQuery();
+
+            JSONArray array = new JSONArray(); 
+           
+          
+            
+            while(rs.next()){
+            JSONObject data1 = new JSONObject();
+            String title = rs.getString(1);
+            String happentime = rs.getString(2);
+            String longitude = rs.getString(3);
+            String latitude = rs.getString(4);
+            String eventid = rs.getString(5);
+            
+            data1.put("happentime", happentime);
+            data1.put("longitude", longitude);
+            data1.put("latitude", latitude);
+            data1.put("title", title);
+            data1.put("eventid", eventid);
+            
+            array.put(data1);
+            
+            }
+
+            responseObj.put("data", array);
+            responseObj.put("success", true);
+            responseObj.put("message", "事件获取成功!");
+       } catch (SQLException ex) {
+             Logger.getLogger(EventServer.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (JSONException ex) {
+             Logger.getLogger(EventServer.class.getName()).log(Level.SEVERE, null, ex);
+         }
     }
     
     private void delete(){
         try {
-             String sql = "delete from sn_event where eventid::varchar = ?";
+             String sql = "update sn_event set label = false where eventid::varchar = ?";
          
              PreparedStatement st = connection.prepareStatement(sql);
              st.setString(1,data.getString("eventid"));
@@ -65,15 +117,15 @@ public class EventServer extends Server {
         try{
                  HttpSession session = request.getSession(false);
                  String curusername = (String) session.getAttribute("HASLOGIN");
-                 String sql = "insert into sn_event(username,happentime,title,event,label,longitude,latitude) values (?,?,?,?,true,?,?)";
+                 String sql = "insert into sn_event(username,title,event,label,longitude,latitude) values (?,?,?,true,?,?)";
                  PreparedStatement st = connection.prepareStatement(sql); 
                  st.setString(1, curusername);
-                 Timestamp time = Timestamp.valueOf(data.getString("happentime"));
-                 st.setTimestamp(2, time);
-                 st.setString(3, data.getString("title"));
-                 st.setString(4, data.getString("event"));
-                 st.setDouble(5, data.getDouble("longitude"));
-                 st.setDouble(6, data.getDouble("latitude"));
+//                 Timestamp time = Timestamp.valueOf(data.getString("happentime"));
+//                 st.setTimestamp(2, time);
+                 st.setString(2, data.getString("title"));
+                 st.setString(3, data.getString("event"));
+                 st.setDouble(4, data.getDouble("longitude"));
+                 st.setDouble(5, data.getDouble("latitude"));
                  
                  int rs = st.executeUpdate();
                  
@@ -99,7 +151,7 @@ public class EventServer extends Server {
     private void getmessage(){
         try{
             
-            String sql = "select happentime,event,title ,longitude,latitude,title from sn_event where eventid::varchar = ?";
+            String sql = "select happentime,event,title,nickname from sn_event,sn_user where eventid::varchar = ? and sn_event.username = sn_user.username";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, data.getString("eventid"));
             ResultSet rs = st.executeQuery();
@@ -108,14 +160,12 @@ public class EventServer extends Server {
             String happentime = rs.getString(1);
             String event = rs.getString(2);
             String title = rs.getString(3);
-            String longitude = rs.getString(4);
-            String latitude = rs.getString(5);
+            String nickname = rs.getString(4);
             
             data.put("happentime", happentime);
             data.put("event", event);
-            data.put("longitude", longitude);
-            data.put("latitude", latitude);
             data.put("title", title);
+            data.put("nickname", nickname);
            
             this.makeResponse(true, "事件提取成功!", data);
             
@@ -129,15 +179,15 @@ public class EventServer extends Server {
     private void alter(){
          try{
              
-             String sql = "update sn_event set happentime = ?,event = ?,title = ?,longitude = ?,latitude = ? where eventid::varchar = ? and label = true";
+             String sql = "update sn_event set event = ?,title = ?,longitude = ?,latitude = ? where eventid::varchar = ? and label = true";
              PreparedStatement st = connection.prepareStatement(sql);
-             Timestamp time = Timestamp.valueOf(data.getString("happentime"));
-             st.setTimestamp(1, time);
-             st.setString(2, data.getString("event"));
-             st.setString(3, data.getString("title"));
-             st.setDouble(4, data.getDouble("longitude"));
-             st.setDouble(5, data.getDouble("latitude"));
-             st.setString(6, data.getString("eventid"));
+//             Timestamp time = Timestamp.valueOf(data.getString("happentime"));
+//             st.setTimestamp(1, time);
+             st.setString(1, data.getString("event"));
+             st.setString(2, data.getString("title"));
+             st.setDouble(3, data.getDouble("longitude"));
+             st.setDouble(4, data.getDouble("latitude"));
+             st.setString(5, data.getString("eventid"));
              int rs = st.executeUpdate();
              this.makeResponse(true, "Alter Success!", null);
         } catch (SQLException ex) {

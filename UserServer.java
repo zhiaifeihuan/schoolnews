@@ -37,9 +37,9 @@ public class UserServer extends Server{
         if(requestType.equalsIgnoreCase("USER_REGISTE")){
             registe();
         }
-        if(requestType.equalsIgnoreCase("USER_UPLOAD")){
-            upload();
-        }
+//        if(requestType.equalsIgnoreCase("USER_UPLOAD")){
+//            upload();
+//        }
         if(requestType.equalsIgnoreCase("USER_ALTER")){
             alter();
         }
@@ -124,28 +124,28 @@ public class UserServer extends Server{
         }
     }
     
-    private void upload(){
-        try{
-             HttpSession session = request.getSession(false);
-             String curusername = (String) session.getAttribute("HASLOGIN");
-             
-             String sql = "insert into sn_personmessage(username,gender,introduce,identity,major,phone) values (?,?,?,?,?,?)";
-             PreparedStatement st = connection.prepareStatement(sql);
-             st.setString(1, curusername);
-             st.setString(2, data.getString("gender"));
-             st.setString(3, data.getString("introduce"));
-             st.setString(4, data.getString("identity"));
-             st.setString(5, data.getString("major"));
-             st.setString(6, data.getString("phone"));
-             int rs = st.executeUpdate();
-             this.makeResponse(true,"UpLoad Success!",null);
-             
-        } catch (SQLException ex) {
-            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JSONException ex) {
-            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    private void upload(){
+//        try{
+//             HttpSession session = request.getSession(false);
+//             String curusername = (String) session.getAttribute("HASLOGIN");
+//             
+//             String sql = "insert into sn_personmessage(username,gender,introduce,identity,major,phone) values (?,?,?,?,?,?)";
+//             PreparedStatement st = connection.prepareStatement(sql);
+//             st.setString(1, curusername);
+//             st.setString(2, data.getString("gender"));
+//             st.setString(3, data.getString("introduce"));
+//             st.setString(4, data.getString("identity"));
+//             st.setString(5, data.getString("major"));
+//             st.setString(6, data.getString("phone"));
+//             int rs = st.executeUpdate();
+//             this.makeResponse(true,"UpLoad Success!",null);
+//             
+//        } catch (SQLException ex) {
+//            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (JSONException ex) {
+//            Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     
     private void check() {
         HttpSession session = request.getSession(true);
@@ -164,7 +164,7 @@ public class UserServer extends Server{
             HttpSession session = request.getSession(false);
             String curusername = (String) session.getAttribute("HASLOGIN");
             
-            String sql = "select gender,introduce,identity,major,phone from sn_personmessage where username = ?";
+            String sql = "select gender,introduce,identity,major,phone,nickname from sn_user where username = ?";
             PreparedStatement st = connection.prepareStatement(sql);
            
             st.setString(1, curusername);
@@ -176,11 +176,13 @@ public class UserServer extends Server{
             String identity = rs.getString("identity");
             String major = rs.getString("major");
             String phone = rs.getString("phone");
+            String nickname = rs.getString("nickname");
             data.put("gender", gender);
             data.put("introduce", introduce);
             data.put("identity", identity);
             data.put("major", major);
             data.put("phone", phone);
+            data.put("nickname", nickname);
             this.makeResponse(true, "GetMessage Success!", data);
             
         } catch (SQLException ex) {
@@ -203,14 +205,15 @@ public class UserServer extends Server{
         try{
              HttpSession session = request.getSession(false);
              String curusername = (String) session.getAttribute("HASLOGIN");
-             String sql = "update sn_personmessage set gender = ?,introduce = ?,identity = ?,major = ?,phone = ? where username = ?";
+             String sql = "update sn_user set gender = ?,introduce = ?,identity = ?,major = ?,phone = ?,nickname = ? where username = ?";
              PreparedStatement st = connection.prepareStatement(sql);
              st.setString(1, data.getString("gender"));
              st.setString(2, data.getString("introduce"));
              st.setString(3, data.getString("identity"));
              st.setString(4, data.getString("major"));
              st.setString(5, data.getString("phone"));
-             st.setString(6, curusername);
+             st.setString(6, data.getString("nickname"));
+             st.setString(7, curusername);
              int rs = st.executeUpdate();
              this.makeResponse(true, "Alter Success!", null);
         } catch (SQLException ex) {
@@ -225,7 +228,7 @@ public class UserServer extends Server{
             HttpSession session = request.getSession(false);
             String curusername = (String) session.getAttribute("HASLOGIN");
             
-            String sql = "select happentime,event,title ,longitude,latitude from sn_event where username = ?";
+            String sql = "select happentime,title from sn_event where username = ?";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, curusername);
             ResultSet rs = st.executeQuery();
@@ -237,14 +240,12 @@ public class UserServer extends Server{
             while(rs.next()){
             JSONObject data1 = new JSONObject();
             String happentime = rs.getString(1);
-            String event = rs.getString(2);
-            String title = rs.getString(3);
-            String longitude = rs.getString(4);
-            String latitude = rs.getString(5);
+            String title = rs.getString(2);
+//            String longitude = rs.getString(3);
+//            String latitude = rs.getString(4);
             data1.put("happentime", happentime);
-            data1.put("event", event);
-            data1.put("longitude", longitude);
-            data1.put("latitude", latitude);
+//            data1.put("longitude", longitude);
+//            data1.put("latitude", latitude);
             data1.put("title", title);
             
             

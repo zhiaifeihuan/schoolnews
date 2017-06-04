@@ -47,29 +47,7 @@ Response:
 Response:
 {"success":true,"message":"Login Success!"} 登录成功
 {"success":false,"message":"Login Failed!"} 登录失败，请先注册
-编辑个人信息并上传：
-请求　url:"DesktopService",
-          method:"POST",
-        　data:
-          {
-            request:params:
-　　　　　　 {
-            type:"USER_UPLOAD",
-            data:{
-                "gender":$("#gender").val(),  性别
-                "introduce":$("#introduce").val(),　一句话的介绍　如"我是一名Giser" 
-		"identify":$("#identify").val(),  身份　如“学生/老师”
-		"major":$("#major").val(),　　专业
-		"phone":$("#phone").val()　　电话
-            　　　}
-        　　 }
-           },
-          success:function(json)
-          {
-            me.close();
-          }
-Response:
-{"success":true,"message":"UpLoad Success!"} 上传信息成功
+
 
 修改个人信息：
 请求　url:"DesktopService",
@@ -84,7 +62,8 @@ Response:
                 "introduce":$("#introduce").val(),　一句话的介绍　如"我是一名Giser" 
 		"identify":$("#identify").val(),  身份　如“学生/老师”
 		"major":$("#major").val(),　　专业
-		"phone":$("#phone").val()　　电话
+		"phone":$("#phone").val(),　　电话
+                "nickname":$("#nickname").val()   昵称
             　　　}
         　　 }
            },
@@ -105,7 +84,6 @@ Response:
             data:{
                 
                  "title" :$("#title").val() 
-                 "happentime":$("#happentime").val()　字符串格式：2012-12-03 03:23:13
 		 "event": $("#event").val(),
                  "longitude": $("#longitude").val(),
                  "latitude": $("#latitude").val()
@@ -130,7 +108,6 @@ Response:
             data:{
                  "eventid":$("#eventid").val(),
                  "title" :$("#title").val() 
-                 "happentime":$("#happentime").val()　字符串格式：2012-12-03 03:23:13
 		 "event": $("#event").val(),
                  "longitude": $("#longitude").val(),
                  "latitude": $("#latitude").val()
@@ -183,7 +160,9 @@ Response:
             me.close();
           }
 Response:
-{"data":{"gender":"123","major":"12","phone":"12","introduce":"12","identity":"12"},"success":true,"message":"GetMessage Success!"}
+{"data":{"gender":"12","major":"12","phone":"12","introduce":"12","identity":"12","nickname":"12"},
+ "success":true,
+ "message":"GetMessage Success!"}
 
 
 显示单个事件信息：
@@ -204,7 +183,9 @@ Response:
             me.close();
           }
 Response:
-{"data":{"happentime":"2012-12-12 02:02:02","eventid":"91","latitude":"12","event":"1","title":"12222222","longitude":"1"},"success":true,"message":"事件提取成功!"}
+{"data":{"happentime":"2017-06-04 00:54:12.127526","eventid":"1","nickname":"12","event":"1","title":"1"},
+ "success":true,
+ "message":"事件提取成功!"}
 
 显示某用户所有事件信息：
 请求   url:"DesktopService",
@@ -224,7 +205,10 @@ Response:
             me.close();
           }
 Response:
-{"data":[{"happentime":"2012-12-12 02:02:02","latitude":"12","event":"123456","title":"12","longitude":"12"},{"happentime":"2012-12-12 02:02:02","latitude":"12","event":"1","title":"12222222","longitude":"1"}],"success":true,"message":"事件获取成功!"}
+{"data":[{"happentime":"2017-06-04 00:54:12.127526","title":"1"},
+         {"happentime":"2017-06-04 09:05:23.55525","title":"2"}],
+ "success":true,
+ "message":"事件获取成功!"}
 注：data是JSONArray，里面的每一组数据是JSONObject，每一组数据中的key和value是字符串
 登出功能：
 请求     url:"DesktopService",
@@ -266,4 +250,28 @@ Response:
 Response:
 {"success":true,"message":"事件删除成功!"}
 
+主页面显示事件：
+请求   url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"EVENT_INIT",
+            data:{
+                  happentime1:$("#happentime1").val(),    开始时间
+                  happentime2:$("#happentime2").val()     结束时间
+            　　　}                                              
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"data":[{"happentime":"2017-06-04 00:54:12.127526","eventid":"1","latitude":"1","title":"1","longitude":"1"},
+         {"happentime":"2017-06-04 09:05:23.55525","eventid":"2","latitude":"2","title":"2","longitude":"2"}],
+ "success":true,
+ "message":"事件获取成功!"}
+注：data是JSONArray，里面的每一组数据是JSONObject，每一组数据中的key和value是字符串
 
