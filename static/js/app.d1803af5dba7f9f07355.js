@@ -130,7 +130,7 @@ module.exports = Component.exports
           } else if (!json.success && opts.failure && typeof opts.failure === 'function') {
             opts.failure(json)
           } else {
-            alert(json.message)
+            console.log(json.message)
           }
           resolve('请求成功,返回不为空')
         }
@@ -2622,6 +2622,19 @@ var store = new __WEBPACK_IMPORTED_MODULE_6_vuex__["a" /* default */].Store({
           reject(data);
         });
       });
+    },
+    checklogin: function checklogin(context) {
+      context.state.opt.params.type = 'USER_CHECK';
+      context.state.opt.params.data = {};
+      context.state.opt.success = function (data) {
+        console.log(data);
+        context.state.haslogin = true;
+      };
+      context.state.opt.failure = function (data) {
+        console.log(data);
+        context.state.haslogin = false;
+      };
+      context.dispatch('ajax_start');
     }
   }
 });
@@ -2914,6 +2927,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       centerlabel: false,
       tips: true,
       event_title: '',
+      eventid_to_show: '',
       pos: {
         nanxiao: {
           lng: 112.942658,
@@ -2935,14 +2949,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           lng: 112.999247,
           lat: 28.144036
         }
-      }
+      },
+      init_event_data: {}
     };
   },
 
   computed: {
     editing: function editing() {
       return this.$store.state.editing;
+    },
+    ajax_data: function ajax_data() {
+      var type = this.$store.state.opt.params.type;
+      if (type === 'EVENT_INIT') {
+        return {
+          happentime1: '2000-01-01',
+          happentime2: '2017-07-01'
+        };
+      } else if (type === 'EVENT_GETMESSAGE') {
+        return {
+          eventid: this.eventid_to_show
+        };
+      } else {
+        return {};
+      }
     }
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    var a = this.$store;
+    a.commit('set_ajax', {
+      t: 'EVENT_INIT',
+      s: function s(data) {
+        _this.init_event_data = data.data;
+        console.log(_this.init_event_data);
+      },
+      f: function f(data) {
+        console.log(data);
+      }
+    });
+    a.commit('ajax_data', this.ajax_data);
+    a.dispatch('ajax_start').then(function () {
+      a.dispatch('checklogin');
+    }, function (error) {
+      console.log(error);
+    });
   },
   methods: {
     handler: function handler(_ref) {
@@ -2960,20 +3011,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.position.zoom = e.target.getZoom();
     },
     enter: function enter(target) {
-      var _this = this;
+      var _this2 = this;
 
       setTimeout(function () {
-        _this.position.center = target;
+        _this2.position.center = target;
       }, 100);
       setTimeout(function () {
-        _this.position.zoom = 17.9;
+        _this2.position.zoom = 17.9;
       }, 100);
       setTimeout(function () {
-        _this.position.zoom = 18;
+        _this2.position.zoom = 18;
       }, 100);
     },
     create_new_event: function create_new_event() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (!this.$store.state.haslogin) {
         this.$swal({
@@ -3003,10 +3054,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           confirmButtonText: '去选取'
         }]).then(function (data) {
           console.log(data);
-          _this2.centerlabel = true;
-          _this2.event_title = data[0];
+          _this3.centerlabel = true;
+          _this3.event_title = data[0];
           setTimeout(function () {
-            _this2.tips = false;
+            _this3.tips = false;
           }, 3000);
         }).catch(this.$swal.noop);
       } else if (this.centerlabel === true) {
@@ -3032,12 +3083,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.centerlabel = false;
       this.tips = true;
     },
-    show_event: function show_event(event) {
-      this.$swal({
-        width: 1500,
-        confirmButtonText: '看完了',
-        allowOutsideClick: false,
-        html: '<h2>体测</h2> <p>早上六点半醒来，上次这个点起床的时候，大清还在。<br><br /> 八点竟然和舍友一起去八食堂吃早饭，这个场景，简直活在梦里。不过头还是很晕，走楼梯都感觉晃来晃去的。<br></p> <p>回来看了一会奇才大战凯尔特人，可能是看多了勇士的球，总觉得缺了点什么。女票找了熬夜有害论的证据来强制要求我早睡。我也有点怂了。这不我现在定下规矩，十二点开始写blog,写完就睡。</p> <p>十点的时候就感觉头晕，都不知道下午能不能跑完全程，然后就又上去睡觉了。这一睡就是下午两点半才起，不过这一觉真的是睡的我神采飞扬眉吐气定神闲。就很开心的吃了半碗皮蛋瘦肉粥就去体测了。</p> <h3>立定跳远</h3> <!--- more ---> <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=5345923&auto=1&height=66"></iframe> <p>第一个项目，差点来不及，尼玛都要到鸟巢了发现校园卡没带，顶着烈日又跑回去拿，心疼自己像个ZZ。不过跳的还行，2.50M。大部分男生也差不多这个水平，除了一个老崔，这好家伙快三米了都。</p> <h3>引体向上</h3> <p>这个引体向上老师很严格，还要求手腕必须伸直，还好我一直以来都是有按标准来的。不过就是心疼了我的几个同学，其中一个说练了半个月，已经有成效了，没想到练得是没伸直手臂的版本，又遇上这么个老师，结果他做的时候，老师计数:“1,2,2,2,3。“很无奈只能放弃了。然后是我们班上的一个大神，看着瘦小，肌肉比谁都发达，听他舍友说他肌肉松弛状态下都是各种棱角，体重又轻。然后就开始了他的表演，一连做了二十几个标准的不费劲。老师都很惊讶，叫他不要做了，已经满分了。然后就是我了，我这个大水比，太久没练了，做了7个就不行了。</p> <h2>50米</h2> <p>其实很不想跑50米，今天本来就有点头晕，就感觉有东西一直跳，然后也没用全力跑，测了个7.1S，应该是表的误差，我估计实际成绩应该是7.3S左右。</p> <h2>1000米</h2> <p>起跑前还有个老师给我们做指导，首先就给我们提了个要求，可以跑得慢，但跑完必须要能活着回去。然后给我们讲了一大堆跑路哦不对跑步的要领。最后总结就是：慢点跑。别说还真挺管用，今天跑完1000米，虽然成绩是历史最差，但是状态是历史最好了，带病上场，跑完还能活蹦乱跳的。我从初中到大学的1000米成绩变化趋势是这样的：<br /> <img src="http://blog.edwarddd.cn/hexo-blog/img/1000m.png" alt="" /></p> <h2>下馆子</h2> <p>今天是老崔的生日啊，哥几个肯定是要聚在一起吹吹比的，他为了和我们一起下馆子，都没和他女票一起过，东北真性情老爷们。</p> <p>体测完他和去年一样吐了一地胆汁，果然还是不能跑太猛，然后被搀扶着回来，休息一会后我们就出发了。去了一家以前去过的湘菜馆，味道很不错，然后就开始吹牛逼，一群男的吹起来，那可是天文地理无所不谈，从运动场聊到秦始皇，从最近的黑客事件聊到FBI。吹到饭店打烊才慢慢离开。路上经过老崔曾经说过的世界上最好喝的奶茶店，可惜人太挤，就在隔壁一家没人的奶茶店买了今天的污点，最难喝的奶茶店。回去也不愿意走寻常路，还得从邻居学校的学生公寓穿行而回。那一路上继续谈笑风生，纵观人生百态，我很多地方还是too young too simple。回到宿舍大家还一起吃了他的女友蛋糕，哈哈，我心里在暗喜上次我女票上次给我的黑森林蛋糕不知道比这个好吃到哪里去了。</p> <h2>关于流水账</h2> <p>写博客的时候感觉有点力不从心，像小学生作文，还是要多读点书，肚子里有点墨水，写出来的才不至于这么naive把。<br><br /> 突然发现这篇文章好像膜的有点过分了，希望不会查水表~~~~(&gt;_&lt;)~~~~</p>'
+    show_event: function show_event(event, item) {
+      var _this4 = this;
+
+      var a = this.$store;
+      a.commit('set_ajax', {
+        t: 'EVENT_GETMESSAGE',
+        s: function s(data) {
+          _this4.$swal({
+            title: data.data.title,
+            width: 1500,
+            confirmButtonText: '看完了',
+            allowOutsideClick: false,
+            html: data.data.happentime + data.data.event
+          });
+        },
+        f: function f(data) {
+          console.log(data);
+        }
+      });
+      this.eventid_to_show = item.eventid;
+      a.commit('ajax_data', this.ajax_data);
+      a.dispatch('ajax_start').then(function (data) {
+        console.log(data, 'success');
+      }, function (error) {
+        console.log(error);
       });
     }
   },
@@ -3133,7 +3203,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this2.uname = '';
           _this2.psword = '';
           _this2.nickname = '';
-          _this2.checklogin();
+          _this2.$store.dispatch('checklogin');
         },
         f: function f(data) {
           console.log(data);
@@ -3141,41 +3211,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       });
     },
-    checklogin: function checklogin() {
-      var _this3 = this;
-
-      console.log('当前的路由信息：', this.$route.path);
-      this.$store.commit('set_ajax', {
-        t: 'USER_CHECK',
-        s: function s(data) {
-          console.log(data);
-          _this3.$store.commit('login');
-        },
-        f: function f(data) {
-          console.log(data);
-          _this3.$store.commit('logout');
-        }
-      });
-      this.$store.dispatch('ajax_start');
-    },
     logout: function logout() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.$store.commit('set_ajax', {
         t: 'USER_QUIT',
         s: function s(data) {
           console.log(data);
-          _this4.checklogin();
+          _this3.$store.dispatch('checklogin');
         },
         f: function f(data) {
           console.log(data);
-          _this4.checklogin();
+          _this3.$store.dispatch('checklogin');
         }
       });
       this.$store.dispatch('ajax_start');
     },
     sss: function sss() {
-      var _this5 = this;
+      var _this4 = this;
 
       this.$swal({
         title: '成功',
@@ -3192,7 +3245,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           });
         }
       }).then(function (data) {
-        _this5.$swal(data);
+        _this4.$swal(data);
       }, function (data) {
         console.log(data);
       });
@@ -3205,9 +3258,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     $route: function $route() {
       this.currenturl = this.$route.path;
     }
-  },
-  created: function created() {
-    this.checklogin();
   }
 });
 
@@ -3953,22 +4003,40 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "show": _vm.tips
     }
-  }, [_vm._v("拖动我选择地点，右键点我确认")])], 1) : _vm._e(), _vm._v(" "), _c('bm-marker', {
-    attrs: {
-      "position": _vm.position.center,
-      "offset": {
-        width: 0,
-        height: 12.5
+  }, [_vm._v("拖动我选择地点，右键点我确认")])], 1) : _vm._e(), _vm._v(" "), _vm._l((_vm.init_event_data), function(item) {
+    return [_c('bm-marker', {
+      key: item.eventid,
+      attrs: {
+        "position": {
+          lng: item.longitude,
+          lat: item.latitude
+        },
+        "offset": {
+          width: 0,
+          height: 12.5
+        }
+      },
+      on: {
+        "click": function($event) {
+          _vm.show_event($event, item)
+        }
       }
-    },
-    on: {
-      "click": _vm.show_event
-    }
-  }, [_c('bm-info-window', {
-    attrs: {
-      "show": true
-    }
-  }, [_vm._v("点击显示此处的事件，测试文章")])], 1)], 1)], 1)
+    }), _vm._v(" "), _c('bm-label', {
+      attrs: {
+        "content": item.title,
+        "labelStyle": {
+          color: '#000',
+          fontSize: '20px',
+          backgroundColor: 'transparent',
+          borderColor: 'transparent'
+        },
+        "position": {
+          lng: item.longitude,
+          lat: item.latitude
+        }
+      }
+    })]
+  })], 2)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -4004,4 +4072,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]),[43]);
-//# sourceMappingURL=app.933b06b13aca59f33ad3.js.map
+//# sourceMappingURL=app.d1803af5dba7f9f07355.js.map

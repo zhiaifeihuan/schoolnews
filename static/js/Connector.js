@@ -27,7 +27,7 @@ export default function (opts) {
           } else if (!json.success && opts.failure && typeof opts.failure === 'function') {
             opts.failure(json)
           } else {
-            alert(json.message)
+            console.log(json.message)
           }
           resolve('请求成功,返回不为空')
         }
