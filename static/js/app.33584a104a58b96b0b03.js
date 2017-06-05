@@ -2574,7 +2574,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_6_vuex__["a" /* default */].Store({
     show_currentevent: false,
     current_event: {},
     opt: {
-      url: 'http://localhost:8080/DesktopService',
+      url: 'DesktopService',
       params: {
         type: '',
         data: {}
@@ -2638,7 +2638,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_6_vuex__["a" /* default */].Store({
         console.log(data);
         context.state.haslogin = false;
       };
-      context.dispatch('ajax_start');
+      context.dispatch('ajax_start').then(function (data) {
+        console.log(data, '成功');
+      }, function (data) {
+        return console.log(data, '失败');
+      });
     }
   }
 });
@@ -2721,7 +2725,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$swal({
         type: 'error',
         title: '错误',
-        text: '尚未进入编辑状态，请通过点击骚东西来编辑'
+        text: '尚未进入编辑状态，请通过点击发布按钮来编辑'
       }).then(function () {
         _this.$router.push('/');
         _this.$destroy();
@@ -2801,7 +2805,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this2.$swal({
             title: '上传成功',
             type: 'success',
-            text: data
+            text: '快去主页看看吧'
           }).then(function () {
             that.$store.commit('stopedit');
             that.$router.push('/');
@@ -2916,7 +2920,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var dy = this.c.y - 200;
       var dampen = dy > 0 ? 2 : 4;
       return {
-        transform: 'translate3d(0,' + dy / dampen + 'px,0)'
+        transform: 'translate3d(0,' + dy / dampen + 'px,0)',
+        width: this.width + 'px'
       };
     },
     show_currentevent: function show_currentevent() {
@@ -3234,11 +3239,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         t: 'USER_REGISTE',
         s: function s(data) {
           console.log(data);
-          _this.$swal(data.message);
-          document.getElementById('closemodel').click();
-          _this.uname = '';
-          _this.psword = '';
-          _this.nickname = '';
+          _this.$swal(data.message).then(function (data) {
+            document.getElementById('closemodel').click();
+            _this.uname = '';
+            _this.psword = '';
+            _this.nickname = '';
+          }).catch(_this.$swal.noop);
         },
         f: function f(data) {
           console.log(data);
@@ -3255,12 +3261,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         t: 'USER_LOGIN',
         s: function s(data) {
           console.log(data);
-          _this2.$swal(data.message);
-          document.getElementById('closemodel').click();
-          _this2.uname = '';
-          _this2.psword = '';
-          _this2.nickname = '';
-          _this2.$store.dispatch('checklogin');
+          _this2.$swal(data.message).then(function (data) {
+            document.getElementById('closemodel').click();
+            _this2.uname = '';
+            _this2.psword = '';
+            _this2.nickname = '';
+            _this2.$store.dispatch('checklogin');
+          });
         },
         f: function f(data) {
           console.log(data);
@@ -3306,6 +3313,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }, function (data) {
         console.log(data);
       });
+    },
+    checklogin: function checklogin() {
+      this.$store.dispatch('checklogin');
     },
     show_currentevent: function show_currentevent() {
       this.$store.state.show_currentevent = !this.$store.state.show_currentevent;
@@ -3597,7 +3607,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": _vm.currenturl
     }
-  }, [_vm._v("个人信息测试 ")])], 1)]), _vm._v(" "), _c('ul', {
+  }, [_vm._v("个人信息测试 ")])], 1), _vm._v(" "), _c('li', {
+    on: {
+      "click": function($event) {}
+    }
+  }, [_c('router-link', {
+    attrs: {
+      "to": _vm.currenturl
+    }
+  }, [_vm._v("测试登录 ")])], 1)]), _vm._v(" "), _c('ul', {
     staticClass: "nav navbar-nav navbar-right"
   }, [(_vm.haslogin) ? _c('li', [_c('router-link', {
     attrs: {
@@ -4112,4 +4130,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]),[43]);
-//# sourceMappingURL=app.1993e05841cc14826daf.js.map
+//# sourceMappingURL=app.33584a104a58b96b0b03.js.map
