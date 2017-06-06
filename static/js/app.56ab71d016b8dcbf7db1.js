@@ -2560,7 +2560,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_6_vuex__["a" /* default */].Store({
     show_login: false,
     login_or_regis: true,
     opt: {
-      url: 'DesktopService',
+      url: 'http://localhost:8080/DesktopService',
       params: {
         type: '',
         data: {}
@@ -2686,6 +2686,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     show_login: function show_login() {
       return this.$store.state.show_login;
+    }
+  },
+  methods: {
+    close_login: function close_login() {
+      this.$store.state.show_login = false;
     }
   }
 });
@@ -2899,7 +2904,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       c: {
         x: 0,
-        y: 200
+        y: 160
       },
       start: { x: 0, y: 0 },
       width: '',
@@ -2914,7 +2919,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   computed: {
     contentPosition: function contentPosition() {
-      var dy = this.c.y - 200;
+      var dy = this.c.y - 160;
       var dampen = dy > 0 ? 2 : 4;
       return {
         transform: 'translate3d(0,' + dy / dampen + 'px,0)',
@@ -2925,7 +2930,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return this.$store.state.show_currentevent;
     },
     headerPath: function headerPath() {
-      return 'M0,0 L' + this.width + ',0 L' + this.width + ',200 ' + 'Q' + this.c.x + ',' + this.c.y + ' 0,200';
+      return 'M0,0 L' + this.width + ',0 L' + this.width + ',160 ' + 'Q' + this.c.x + ',' + this.c.y + ' 0,160';
     }
   },
   methods: {
@@ -2943,7 +2948,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         var dy = e.pageY - this.start.y;
         var dampen = dy > 0 ? 1.5 : 4;
-        this.c.y = 200 + dy / dampen;
+        this.c.y = 160 + dy / dampen;
         document.getElementById('content').scrollTop = this.current_scroll_top - dy;
       }
     },
@@ -2952,7 +2957,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.dragging = false;
         __WEBPACK_IMPORTED_MODULE_0_dynamics_js___default.a.animate(this.c, {
           x: this.width / 2,
-          y: 200
+          y: 160
         }, {
           type: __WEBPACK_IMPORTED_MODULE_0_dynamics_js___default.a.spring,
           duration: 700,
@@ -3202,6 +3207,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return new __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_promise___default.a(function (resolve, reject) {
               if (title === '') {
                 reject('标题不能为空！');
+              } else if (title.length > 15) {
+                reject('标题不能大于超过15个字符');
               } else {
                 resolve();
               }
@@ -3757,9 +3764,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })])]), _vm._v(" "), _c('img', {
     attrs: {
       "src": __webpack_require__(35)
-    },
-    on: {
-      "click": _vm.close
     }
   }), _vm._v(" "), _c('div', {
     staticClass: "login"
@@ -3847,9 +3851,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })])]), _vm._v(" "), _c('img', {
     attrs: {
       "src": __webpack_require__(35)
-    },
-    on: {
-      "click": _vm.close
     }
   }), _vm._v(" "), _c('div', {
     staticClass: "login"
@@ -4073,8 +4074,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           lat: item.latitude
         },
         "offset": {
-          width: 0,
-          height: 12.5
+          width: -23,
+          height: 13
+        },
+        "icon": {
+          url: '../../static/img/location.png',
+          size: {
+            width: 24,
+            height: 24
+          }
         }
       },
       on: {
@@ -4086,14 +4094,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "content": item.title,
         "labelStyle": {
-          color: '#000',
-          fontSize: '20px',
+          color: '#3bc0ff',
+          fontSize: '15px',
           backgroundColor: 'transparent',
           borderColor: 'transparent'
         },
         "position": {
           lng: item.longitude,
           lat: item.latitude
+        },
+        "offset": {
+          width: -23,
+          height: 13
         }
       }
     })]
@@ -4128,9 +4140,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "name": "slide",
       "mode": "in-out"
     }
-  }, [_c('router-view')], 1)], 1), _vm._v(" "), _c('event'), _vm._v(" "), (_vm.show_login) ? _c('div', {
-    staticClass: "zhezhao"
-  }) : _vm._e(), _vm._v(" "), _c('transition', {
+  }, [_c('router-view')], 1)], 1), _vm._v(" "), _c('event'), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.show_login),
+      expression: "show_login"
+    }],
+    staticClass: "zhezhao",
+    on: {
+      "click": _vm.close_login
+    }
+  }), _vm._v(" "), _c('transition', {
     attrs: {
       "name": "move"
     }
@@ -4222,4 +4243,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]),[43]);
-//# sourceMappingURL=app.97b28effbea850fc8b1a.js.map
+//# sourceMappingURL=app.56ab71d016b8dcbf7db1.js.map
