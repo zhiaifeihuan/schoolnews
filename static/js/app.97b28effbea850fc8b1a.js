@@ -4206,6 +4206,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v(_vm._s(_vm.title))]), _vm._v(" "), _c('p', [_vm._v("作者: " + _vm._s(_vm.author))]), _vm._v(" "), _c('p', [_vm._v("发布时间: " + _vm._s(_vm.happentime))])]), _vm._v(" "), _c('template', {
     slot: "content"
   }, [_c('div', {
+    attrs: {
+      "ondragstart": "return false;"
+    },
     domProps: {
       "innerHTML": _vm._s(_vm.content)
     }
@@ -4219,4 +4222,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]),[43]);
-//# sourceMappingURL=app.f86685e5658c31fc91f9.js.map
+//# sourceMappingURL=app.97b28effbea850fc8b1a.js.map
