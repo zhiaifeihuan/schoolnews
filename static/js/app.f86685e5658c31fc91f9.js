@@ -3188,7 +3188,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$swal({
           type: 'warning',
           text: '请先登录再进行操作'
-        });
+        }).then(function () {
+          _this3.$store.state.show_login = true;
+        }).catch(this.$swal.noop);
       } else if (!this.editing && this.centerlabel === false) {
         this.$swal.queue([{
           progressSteps: ['1', '2'],
@@ -3732,7 +3734,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "perspective zhezhao"
+    staticClass: "perspective"
   }, [_c('transition', {
     attrs: {
       "name": "fanzhuan",
@@ -4126,7 +4128,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "name": "slide",
       "mode": "in-out"
     }
-  }, [_c('router-view')], 1)], 1), _vm._v(" "), _c('event'), _vm._v(" "), (_vm.show_login) ? _c('login') : _vm._e(), _vm._v(" "), _c('div', {
+  }, [_c('router-view')], 1)], 1), _vm._v(" "), _c('event'), _vm._v(" "), (_vm.show_login) ? _c('div', {
+    staticClass: "zhezhao"
+  }) : _vm._e(), _vm._v(" "), _c('transition', {
+    attrs: {
+      "name": "move"
+    }
+  }, [(_vm.show_login) ? _c('login') : _vm._e()], 1), _vm._v(" "), _c('div', {
     attrs: {
       "id": "loading"
     }
@@ -4211,4 +4219,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]),[43]);
-//# sourceMappingURL=app.49322cbf30484dec94af.js.map
+//# sourceMappingURL=app.f86685e5658c31fc91f9.js.map
