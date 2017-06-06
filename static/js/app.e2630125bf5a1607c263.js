@@ -2543,7 +2543,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-__WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].config.productionTip = true;
+__WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].config.productionTip = false;
 __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODULE_4_vue_baidu_map___default.a, {
   ak: 'b0yahNnOZyaNowxE2FNPr9FTZwn9sDY1'
 });
@@ -2560,7 +2560,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_6_vuex__["a" /* default */].Store({
     show_login: false,
     login_or_regis: true,
     opt: {
-      url: 'http://localhost:8080/DesktopService',
+      url: 'DesktopService',
       params: {
         type: '',
         data: {}
@@ -2620,11 +2620,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_6_vuex__["a" /* default */].Store({
       context.state.opt.params.type = 'USER_CHECK';
       context.state.opt.params.data = {};
       context.state.opt.success = function (data) {
-        console.log(data);
         context.state.haslogin = true;
       };
       context.state.opt.failure = function (data) {
-        console.log(data);
         context.state.haslogin = false;
       };
       context.dispatch('ajax_start').then(function (data) {
@@ -3268,6 +3266,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         console.log(data, 'success');
       }, function (error) {
         console.log(error);
+      });
+    },
+    locationError: function locationError() {
+      this.$swal({
+        type: 'error',
+        title: '定位失败',
+        text: '请检查你的定位功能是否开启'
       });
     }
   }
@@ -4035,7 +4040,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "center": _vm.position.center,
       "scroll-wheel-zoom": _vm.scroll,
-      "zoom": _vm.position.zoom
+      "zoom": _vm.position.zoom,
+      "min-zoom": 11
     },
     on: {
       "zoomend": _vm.synczoom,
@@ -4044,6 +4050,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('bm-navigation', {
     attrs: {
       "anchor": "BMAP_ANCHOR_BOTTOM_LEFT"
+    }
+  }), _vm._v(" "), _c('bm-geolocation', {
+    attrs: {
+      "anchor": "BMAP_ANCHOR_BOTTOM_RIGHT",
+      "showAddressBar": true
+    },
+    on: {
+      "locationError": _vm.locationError,
+      "locationSuccess": _vm.locationError
     }
   }), _vm._v(" "), (_vm.centerlabel) ? _c('bm-marker', {
     attrs: {
@@ -4065,7 +4080,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "show": _vm.tips
     }
-  }, [_vm._v("拖动我选择地点，右键点我确认")])], 1) : _vm._e(), _vm._v(" "), _vm._l((_vm.init_event_data), function(item) {
+  }, [_vm._v("拖动我选择地点，右键点我确认(手机长按)")])], 1) : _vm._e(), _vm._v(" "), _vm._l((_vm.init_event_data), function(item) {
     return [_c('bm-marker', {
       key: item.eventid,
       attrs: {
@@ -4073,10 +4088,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           lng: item.longitude,
           lat: item.latitude
         },
-        "offset": {
-          width: -23,
-          height: 13
-        },
+        "animation": "BMAP_ANIMATION_BOUNCE",
         "icon": {
           url: '../../static/img/location.png',
           size: {
@@ -4094,7 +4106,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "content": item.title,
         "labelStyle": {
-          color: '#3bc0ff',
+          color: '#111',
           fontSize: '15px',
           backgroundColor: 'transparent',
           borderColor: 'transparent'
@@ -4102,10 +4114,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "position": {
           lng: item.longitude,
           lat: item.latitude
-        },
-        "offset": {
-          width: -23,
-          height: 13
         }
       }
     })]
@@ -4243,4 +4251,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]),[43]);
-//# sourceMappingURL=app.56ab71d016b8dcbf7db1.js.map
+//# sourceMappingURL=app.e2630125bf5a1607c263.js.map
