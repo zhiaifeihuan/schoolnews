@@ -4060,6 +4060,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "locationError": _vm.locationError,
       "locationSuccess": _vm.locationError
     }
+  }), _vm._v(" "), _c('bm-copyright', {
+    attrs: {
+      "anchor": "BMAP_ANCHOR_BOTTOM_RIGHT",
+      "copyright": [{
+        id: 1,
+        content: '<p class=\'text-danger bg-info\'>© 2017 Edward CSU</p>'
+      }]
+    }
   }), _vm._v(" "), (_vm.centerlabel) ? _c('bm-marker', {
     attrs: {
       "icon": {
@@ -4251,4 +4259,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]),[43]);
-//# sourceMappingURL=app.e2630125bf5a1607c263.js.map
+//# sourceMappingURL=app.b9898debc58de63d7805.js.map
