@@ -25,7 +25,7 @@ public class EventServer extends Server {
      public EventServer() {
         super();
     }
-    
+    int i = 0;
     @Override
     public void run(){
         if(requestType.equalsIgnoreCase("EVENT_UPLOAD")){
@@ -44,8 +44,77 @@ public class EventServer extends Server {
         if(requestType.equalsIgnoreCase("EVENT_INIT")){
             eventinit();
         }
+        if(requestType.equalsIgnoreCase("EVENT_SEARCH")){
+            search();
+        }
+        if(requestType.equalsIgnoreCase("EVENT_GETHOTMESSAGE")){
+            gethotmessage();
+        }
        
     }
+    
+   
+    private void gethotmessage(){
+        try{
+            HttpSession session = request.getSession(false);
+            String curusername = (String) session.getAttribute("HASLOGIN");
+            
+            String sql = "select happentime,title from sn_event where username = ? and label = true order by click DESC limit 5";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, curusername);
+            ResultSet rs = st.executeQuery();
+
+            JSONArray array = new JSONArray();
+            while(rs.next()){
+            JSONObject data1 = new JSONObject();
+            String happentime = rs.getString(1);
+            String title = rs.getString(2);
+            data1.put("happentime", happentime);
+            data1.put("title", title);
+            array.put(data1);
+            
+            }
+            responseObj.put("data", array);
+            responseObj.put("success", true);
+            responseObj.put("message", "事件获取成功!");
+            
+            
+        } catch (SQLException ex) {
+             Logger.getLogger(EventServer.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (JSONException ex) {
+             Logger.getLogger(EventServer.class.getName()).log(Level.SEVERE, null, ex);
+         }
+    }      
+    
+    private void search(){
+        try{
+           
+            String sql = "select title,eventid from sn_event where title ~* ? and label = true order by click DESC";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, data.getString("title"));
+            ResultSet rs = st.executeQuery();
+             
+            JSONArray array = new JSONArray();
+            while(rs.next()){
+                JSONObject data1 = new JSONObject();
+                String title = rs.getString(1);
+                String eventid = rs.getString(2);
+               
+                data1.put("title", title);
+                data1.put("eventid", eventid);
+                array.put(data1);
+            }
+            responseObj.put("data", array);
+            responseObj.put("success", true);
+            responseObj.put("message", "事件搜索成功!");
+        } catch (SQLException ex) {
+             Logger.getLogger(EventServer.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (JSONException ex) {
+             Logger.getLogger(EventServer.class.getName()).log(Level.SEVERE, null, ex);
+         }
+    }
+    
     
     private void eventinit(){
        try{
@@ -117,7 +186,7 @@ public class EventServer extends Server {
         try{
                  HttpSession session = request.getSession(false);
                  String curusername = (String) session.getAttribute("HASLOGIN");
-                 String sql = "insert into sn_event(username,title,event,label,longitude,latitude) values (?,?,?,true,?,?)";
+                 String sql = "insert into sn_event(username,title,event,label,longitude,latitude,click) values (?,?,?,true,?,?,1)";
                  PreparedStatement st = connection.prepareStatement(sql); 
                  st.setString(1, curusername);
 //                 Timestamp time = Timestamp.valueOf(data.getString("happentime"));
@@ -151,7 +220,7 @@ public class EventServer extends Server {
     private void getmessage(){
         try{
             
-            String sql = "select happentime,event,title,nickname from sn_event,sn_user where eventid::varchar = ? and sn_event.username = sn_user.username";
+            String sql = "select happentime,event,title,nickname,click from sn_event,sn_user where eventid::varchar = ? and sn_event.username = sn_user.username";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, data.getString("eventid"));
             ResultSet rs = st.executeQuery();
@@ -161,12 +230,23 @@ public class EventServer extends Server {
             String event = rs.getString(2);
             String title = rs.getString(3);
             String nickname = rs.getString(4);
+            int click = rs.getInt(5);
             
             data.put("happentime", happentime);
             data.put("event", event);
             data.put("title", title);
             data.put("nickname", nickname);
            
+            
+             
+            String sql1 = "update sn_event set click = ? where eventid::varchar = ?";
+            
+            PreparedStatement st1 = connection.prepareStatement(sql1);
+            
+            st1.setInt(1,click+1);
+            st1.setString(2, data.getString("eventid"));
+            int rs1 = st1.executeUpdate();
+            
             this.makeResponse(true, "事件提取成功!", data);
             
         } catch (SQLException ex) {

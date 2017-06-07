@@ -164,7 +164,7 @@ public class UserServer extends Server{
             HttpSession session = request.getSession(false);
             String curusername = (String) session.getAttribute("HASLOGIN");
             
-            String sql = "select gender,introduce,identity,major,phone,nickname from sn_user where username = ?";
+            String sql = "select gender,introduce,identity,major,phone,nickname from sn_user where username = ? ";
             PreparedStatement st = connection.prepareStatement(sql);
            
             st.setString(1, curusername);
@@ -183,6 +183,17 @@ public class UserServer extends Server{
             data.put("major", major);
             data.put("phone", phone);
             data.put("nickname", nickname);
+            
+            String sql1 = "select count(*) from sn_event where username = ? ";
+            PreparedStatement st1 = connection.prepareStatement(sql1);
+             
+            st1.setString(1, curusername);
+            
+            ResultSet rs1 = st1.executeQuery();
+            rs1.next();
+            String count = rs1.getString("count");
+            
+            data.put("count", count);
             this.makeResponse(true, "GetMessage Success!", data);
             
         } catch (SQLException ex) {
@@ -228,7 +239,7 @@ public class UserServer extends Server{
             HttpSession session = request.getSession(false);
             String curusername = (String) session.getAttribute("HASLOGIN");
             
-            String sql = "select happentime,title from sn_event where username = ?";
+            String sql = "select happentime,title from sn_event where username = ? and label = true";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, curusername);
             ResultSet rs = st.executeQuery();

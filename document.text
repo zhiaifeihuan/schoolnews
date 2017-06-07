@@ -160,7 +160,7 @@ Response:
             me.close();
           }
 Response:
-{"data":{"gender":"12","major":"12","phone":"12","introduce":"12","identity":"12","nickname":"12"},
+{"data":{"gender":"12","major":"12","phone":"12","introduce":"12","identity":"12","nickname":"12","count":"5"},
  "success":true,
  "message":"GetMessage Success!"}
 
@@ -259,8 +259,8 @@ Response:
 　　　　　　 {
             type:"EVENT_INIT",
             data:{
-                  happentime1:$("#happentime1").val(),    开始时间  如2012-02-02 不需要时间，默认00:00:00
-                  happentime2:$("#happentime2").val()     结束时间
+                  "happentime1":$("#happentime1").val(),    开始时间  如2012-02-02 不需要时间，默认00:00:00
+                  "happentime2":$("#happentime2").val()     结束时间
             　　　}                                              
         　　 }
            },
@@ -271,6 +271,54 @@ Response:
 Response:
 {"data":[{"happentime":"2017-06-04 00:54:12.127526","eventid":"1","latitude":"1","title":"1","longitude":"1"},
          {"happentime":"2017-06-04 09:05:23.55525","eventid":"2","latitude":"2","title":"2","longitude":"2"}],
+ "success":true,
+ "message":"事件获取成功!"}
+注：data是JSONArray，里面的每一组数据是JSONObject，每一组数据中的key和value是字符串
+
+搜索功能：
+请求    url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"EVENT_SEARCH",
+            data:{
+                  "title":$("#title").val()
+            　　　}                                              
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"data":[{"eventid":"3","title":"中南换校长了"},
+         {"eventid":"5","title":"中南人"}],
+ "success":true,
+ "message":"事件搜索成功!"}
+注：data是JSONArray，里面的每一组数据是JSONObject，每一组数据中的key和value是字符串
+
+获取五个热点事件：
+请求    url:"DesktopService",
+          method:"POST",
+        　data:
+          {
+            request:params:
+　　　　　　 {
+            type:"EVENT_GETHOTMESSAGE",
+            data:{
+                  
+            　　　}                                              
+        　　 }
+           },
+          success:function(json)
+          {
+            me.close();
+          }
+Response:
+{"data":[{"eventid":"3","title":"中南换校长了"},
+         {"eventid":"5","title":"中南人"}],
  "success":true,
  "message":"事件获取成功!"}
 注：data是JSONArray，里面的每一组数据是JSONObject，每一组数据中的key和value是字符串
