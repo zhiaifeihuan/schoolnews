@@ -317,8 +317,8 @@ Response:
             me.close();
           }
 Response:
-{"data":[{"eventid":"3","title":"中南换校长了","happentime":""},
-         {"eventid":"5","title":"中南人","happentime":""}],
+{"data":[{"eventid":"3","title":"中南换校长了","happentime":"","viewd":""},
+         {"eventid":"5","title":"中南人","happentime":"","viewd":""}],
  "success":true,
  "message":"事件获取成功!"}
 注：data是JSONArray，里面的每一组数据是JSONObject，每一组数据中的key和value是字符串

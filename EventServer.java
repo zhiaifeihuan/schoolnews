@@ -59,7 +59,7 @@ public class EventServer extends Server {
             HttpSession session = request.getSession(false);
             String curusername = (String) session.getAttribute("HASLOGIN");
             
-            String sql = "select happentime,title,eventid from sn_event where username = ? and label = true order by viewd DESC limit 5";
+            String sql = "select happentime,title,eventid,viewd from sn_event where username = ? and label = true order by viewd DESC limit 5";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, curusername);
             ResultSet rs = st.executeQuery();
@@ -70,9 +70,11 @@ public class EventServer extends Server {
             String happentime = rs.getString(1);
             String title = rs.getString(2);
             String eventid = rs.getString(3);
+            String viewd = rs.getString(4);
             data1.put("happentime", happentime);
             data1.put("title", title);
             data1.put("eventid", eventid);
+            data1.put("viewd", viewd);
             array.put(data1);
             
             }
