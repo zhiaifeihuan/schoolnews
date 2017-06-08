@@ -2876,16 +2876,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     ttt: __WEBPACK_IMPORTED_MODULE_0__components_header___default.a
   },
   data: function data() {
-    return {};
-  },
-  mounted: function mounted() {
-    this.changyan;
+    return {
+      show_changyan: false
+    };
   },
   computed: {
     show_currentevent: function show_currentevent() {
-      if (this.$store.state.show_currentevent) {
-        this.changyan();
-      }
       return this.$store.state.show_currentevent;
     },
     title: function title() {
@@ -2911,8 +2907,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {
     close: function close() {
       this.$store.state.show_currentevent = false;
+      this.show_changyan = false;
     },
     changyan: function changyan() {
+      this.show_changyan = true;
       var appid = 'cyt3mHjK0';
       var conf = '0600c66d1760241687be2adb0583e310';
       var doc = document;
@@ -5332,7 +5330,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.close
     }
-  }, [_vm._v("看完啦")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("看完啦")]), _vm._v(" "), _c('button', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (!_vm.show_changyan),
+      expression: "!show_changyan"
+    }],
+    staticClass: "btn btn-info",
+    on: {
+      "click": _vm.changyan
+    }
+  }, [_vm._v("我要说两句！")]), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.show_changyan),
+      expression: "show_changyan"
+    }],
     attrs: {
       "id": "SOHUCS",
       "sid": _vm.eventid
@@ -5343,4 +5358,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 },[161]);
-//# sourceMappingURL=app.e9a389cf0d7cbb759a99.js.map
+//# sourceMappingURL=app.395a78903032f24c2fa6.js.map
