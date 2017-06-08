@@ -2687,6 +2687,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     userinfo: __WEBPACK_IMPORTED_MODULE_2__components_userinfo___default.a
   },
   computed: {
+    show_currentevent: function show_currentevent() {
+      return this.$store.state.show_currentevent;
+    },
     show_loading: function show_loading() {
       return this.$store.state.show_loading;
     },
@@ -2875,8 +2878,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {};
   },
+  mounted: function mounted() {
+    this.changyan;
+  },
   computed: {
     show_currentevent: function show_currentevent() {
+      if (this.$store.state.show_currentevent) {
+        this.changyan();
+      }
       return this.$store.state.show_currentevent;
     },
     title: function title() {
@@ -2894,14 +2903,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     viewd: function viewd() {
       return this.$store.state.current_event.viewd;
+    },
+    eventid: function eventid() {
+      return this.$store.state.current_event.eventid;
     }
   },
   methods: {
-    show_event: function show_event() {
-      this.$store.state.show_currentevent = !this.$store.state.show_currentevent;
-    },
     close: function close() {
       this.$store.state.show_currentevent = false;
+    },
+    changyan: function changyan() {
+      var appid = 'cyt3mHjK0';
+      var conf = '0600c66d1760241687be2adb0583e310';
+      var doc = document;
+      var s = doc.createElement('script');
+      var h = doc.getElementsByTagName('head')[0] || doc.head || doc.documentElement;
+      s.type = 'text/javascript';
+      s.charset = 'utf-8';
+      s.src = 'http://assets.changyan.sohu.com/upload/changyan.js?conf=' + conf + '&appid=' + appid;
+      h.insertBefore(s, h.firstChild);
     }
   }
 });
@@ -5262,7 +5282,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": "event-zhezhao"
     },
     on: {
-      "click": _vm.show_event
+      "click": _vm.close
     }
   })]), _vm._v(" "), _c('transition', {
     attrs: {
@@ -5312,10 +5332,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.close
     }
-  }, [_vm._v("看完啦")])])], 2)], 1)])])], 1)
+  }, [_vm._v("看完啦")]), _vm._v(" "), _c('div', {
+    attrs: {
+      "id": "SOHUCS",
+      "sid": _vm.eventid
+    }
+  })])], 2)], 1)])])], 1)
 },staticRenderFns: []}
 
 /***/ })
 
 },[161]);
-//# sourceMappingURL=app.e58487cf97445dfc737a.js.map
+//# sourceMappingURL=app.e9a389cf0d7cbb759a99.js.map
