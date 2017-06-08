@@ -2564,7 +2564,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_6_vuex__["a" /* default */].Store({
     show_userinfo: false,
     login_or_regis: true,
     opt: {
-      url: 'DesktopService',
+      url: 'http://localhost:8080/DesktopService',
       params: {
         type: '',
         data: {}
@@ -3048,7 +3048,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$store.commit('set_ajax', {
         t: 'USER_LOGIN',
         s: function s(data) {
-          _this.$swal(data.message).then(function (data) {
+          _this.$swal({
+            type: 'success',
+            title: data.message,
+            timer: 1000,
+            text: '1S后自动消失'
+          }).then(function (data) {
             _this.$store.state.show_login = false;
             _this.$store.dispatch('checklogin');
           }, function () {
@@ -3215,7 +3220,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     create_new_event: function create_new_event() {
       var _this3 = this;
 
-      if (!this.$store.state.haslogin) {
+      if (this.$store.state.haslogin) {
         this.$swal({
           type: 'warning',
           text: '请先登录再进行操作'
@@ -4399,12 +4404,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "row"
   }, [_c('button', {
-    staticClass: "btn btn-info col-md-1  col-xs-offset-5",
+    staticClass: "btn btn-info col-xs-6",
     on: {
       "click": _vm.upload_event
     }
   }, [_vm._v("点此提交 ")]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-danger  col-md-1",
+    staticClass: "btn btn-danger  col-xs-6",
     on: {
       "click": _vm.stopedit
     }
@@ -5313,4 +5318,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 },[161]);
-//# sourceMappingURL=app.dd307cba1db1e47afcf9.js.map
+//# sourceMappingURL=app.489ca442d78f8154a5ea.js.map
