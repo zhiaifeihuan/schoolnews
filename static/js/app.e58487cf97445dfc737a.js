@@ -2564,7 +2564,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_6_vuex__["a" /* default */].Store({
     show_userinfo: false,
     login_or_regis: true,
     opt: {
-      url: 'http://localhost:8080/DesktopService',
+      url: 'DesktopService',
       params: {
         type: '',
         data: {}
@@ -3220,7 +3220,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     create_new_event: function create_new_event() {
       var _this3 = this;
 
-      if (this.$store.state.haslogin) {
+      if (!this.$store.state.haslogin) {
         this.$swal({
           type: 'warning',
           text: '请先登录再进行操作'
@@ -5318,4 +5318,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 },[161]);
-//# sourceMappingURL=app.489ca442d78f8154a5ea.js.map
+//# sourceMappingURL=app.e58487cf97445dfc737a.js.map
