@@ -23,9 +23,9 @@ responseObj.put("data",data);          JSONObject
             me.close();
           }
 Response:
-{"success":true,"message":"Registe Success!"} 注册成功
-{"success":false,"message":"Registe Failed!"} 注册失败，用户名或昵称已存在
-{"success":false,"message":"Can't be empty!"} 注册失败，用户名或昵称或密码不能为空
+{"success":true,"message":"注册成功!"} 注册成功
+{"success":false,"message":"用户已存在!"} 注册失败，用户名或昵称已存在
+{"success":false,"message":"用户名，昵称或密码不能为空!"} 注册失败，用户名或昵称或密码不能为空
 登录功能：
 请求　url:"DesktopService",
           method:"POST",
@@ -45,8 +45,8 @@ Response:
             me.close();
           }
 Response:
-{"success":true,"message":"Login Success!"} 登录成功
-{"success":false,"message":"Login Failed!"} 登录失败，请先注册
+{"success":true,"message":"登录成功啦"} 登录成功
+{"success":false,"message":"登录失败，用户名或密码不正确"} 登录失败，请先注册
 
 
 修改个人信息：
@@ -72,7 +72,7 @@ Response:
             me.close();
           }
 Response:
-{"success":true,"message":"Alter Success!"} 修改信息成功
+{"success":true,"message":"修改个人信息成功!"} 修改信息成功
 上传事件:
 请求　url:"DesktopService",
           method:"POST",
@@ -119,7 +119,7 @@ Response:
             me.close();
           }
 Response:
-{"success":true,"message":"Alter Success!"}
+{"success":true,"message":"事件修改成功!"}
 
 判断是否登录:
 请求　url:"DesktopService",
@@ -139,8 +139,8 @@ Response:
             me.close();
           }
 Response:
-{"success":true,"message":"HASLOGIN"} 已登录成功
-{"success":false,"message":"Please Login First"} 未登录
+{"success":true,"message":"已登录成功!"} 已登录成功
+{"success":false,"message":"请先登录!"} 未登录
 
 显示个人信息：
 请求   url:"DesktopService",
@@ -162,7 +162,7 @@ Response:
 Response:
 {"data":{"gender":"12","major":"12","phone":"12","introduce":"12","identity":"12","nickname":"12","count":"5"},
  "success":true,
- "message":"GetMessage Success!"}
+ "message":"获取个人信息成功!"}
 
 
 显示单个事件信息：
@@ -183,11 +183,11 @@ Response:
             me.close();
           }
 Response:
-{"data":{"happentime":"2017-06-04 00:54:12.127526","eventid":"1","nickname":"12","event":"1","title":"1"},
+{"data":{"happentime":"2017-06-04 00:54:12.127526","eventid":"1","nickname":"12","event":"1","title":"1"，"viewd":"6"},
  "success":true,
  "message":"事件提取成功!"}
 
-显示某用户所有事件信息：
+显示某用户所有事件信息：(每次取5件，param从0开始)
 请求   url:"DesktopService",
           method:"POST",
         　data:
@@ -196,7 +196,7 @@ Response:
 　　　　　　 {
             type:"USER_GETEVENT",
             data:{
-
+                  param:$("#param").val()
             　　　}
         　　 }
            },
@@ -205,8 +205,8 @@ Response:
             me.close();
           }
 Response:
-{"data":[{"happentime":"2017-06-04 00:54:12.127526","title":"1"},
-         {"happentime":"2017-06-04 09:05:23.55525","title":"2"}],
+{"data":[{"happentime":"2017-06-04 00:54:12.127526","title":"1","eventid":"3"},
+         {"happentime":"2017-06-04 09:05:23.55525","title":"2","eventid":"4"}],
  "success":true,
  "message":"事件获取成功!"}
 注：data是JSONArray，里面的每一组数据是JSONObject，每一组数据中的key和value是字符串
@@ -317,8 +317,8 @@ Response:
             me.close();
           }
 Response:
-{"data":[{"eventid":"3","title":"中南换校长了"},
-         {"eventid":"5","title":"中南人"}],
+{"data":[{"eventid":"3","title":"中南换校长了","happentime":""},
+         {"eventid":"5","title":"中南人","happentime":""}],
  "success":true,
  "message":"事件获取成功!"}
 注：data是JSONArray，里面的每一组数据是JSONObject，每一组数据中的key和value是字符串

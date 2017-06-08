@@ -59,18 +59,20 @@ public class EventServer extends Server {
             HttpSession session = request.getSession(false);
             String curusername = (String) session.getAttribute("HASLOGIN");
             
-            String sql = "select happentime,title from sn_event where username = ? and label = true order by click DESC limit 5";
+            String sql = "select happentime,title,eventid from sn_event where username = ? and label = true order by viewd DESC limit 5";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, curusername);
             ResultSet rs = st.executeQuery();
-
+            
             JSONArray array = new JSONArray();
             while(rs.next()){
             JSONObject data1 = new JSONObject();
             String happentime = rs.getString(1);
             String title = rs.getString(2);
+            String eventid = rs.getString(3);
             data1.put("happentime", happentime);
             data1.put("title", title);
+            data1.put("eventid", eventid);
             array.put(data1);
             
             }
@@ -88,8 +90,14 @@ public class EventServer extends Server {
     
     private void search(){
         try{
+            if(data.getString("title").length() == 0){
+                JSONArray array = new JSONArray();
+                responseObj.put("data", array);
+                responseObj.put("success", true);
+                responseObj.put("message", "事件搜索成功!");
+            }else {
            
-            String sql = "select title,eventid from sn_event where title ~* ? and label = true order by click DESC";
+            String sql = "select title,eventid from sn_event where title ~* ? and label = true order by viewd DESC";
             
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, data.getString("title"));
@@ -108,6 +116,7 @@ public class EventServer extends Server {
             responseObj.put("data", array);
             responseObj.put("success", true);
             responseObj.put("message", "事件搜索成功!");
+            }
         } catch (SQLException ex) {
              Logger.getLogger(EventServer.class.getName()).log(Level.SEVERE, null, ex);
          } catch (JSONException ex) {
@@ -186,7 +195,7 @@ public class EventServer extends Server {
         try{
                  HttpSession session = request.getSession(false);
                  String curusername = (String) session.getAttribute("HASLOGIN");
-                 String sql = "insert into sn_event(username,title,event,label,longitude,latitude,click) values (?,?,?,true,?,?,1)";
+                 String sql = "insert into sn_event(username,title,event,label,longitude,latitude,viewd) values (?,?,?,true,?,?,1)";
                  PreparedStatement st = connection.prepareStatement(sql); 
                  st.setString(1, curusername);
 //                 Timestamp time = Timestamp.valueOf(data.getString("happentime"));
@@ -220,7 +229,7 @@ public class EventServer extends Server {
     private void getmessage(){
         try{
             
-            String sql = "select happentime,event,title,nickname,click from sn_event,sn_user where eventid::varchar = ? and sn_event.username = sn_user.username";
+            String sql = "select happentime,event,title,nickname,viewd from sn_event,sn_user where eventid::varchar = ? and sn_event.username = sn_user.username";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, data.getString("eventid"));
             ResultSet rs = st.executeQuery();
@@ -230,20 +239,20 @@ public class EventServer extends Server {
             String event = rs.getString(2);
             String title = rs.getString(3);
             String nickname = rs.getString(4);
-            int click = rs.getInt(5);
-            
+            int viewd = rs.getInt(5);
+            String viewd1 = String.valueOf(viewd);
             data.put("happentime", happentime);
             data.put("event", event);
             data.put("title", title);
             data.put("nickname", nickname);
-           
+            data.put("viewd", viewd1);
             
              
-            String sql1 = "update sn_event set click = ? where eventid::varchar = ?";
+            String sql1 = "update sn_event set viewd = ? where eventid::varchar = ?";
             
             PreparedStatement st1 = connection.prepareStatement(sql1);
             
-            st1.setInt(1,click+1);
+            st1.setInt(1,viewd+1);
             st1.setString(2, data.getString("eventid"));
             int rs1 = st1.executeUpdate();
             
@@ -269,7 +278,7 @@ public class EventServer extends Server {
              st.setDouble(4, data.getDouble("latitude"));
              st.setString(5, data.getString("eventid"));
              int rs = st.executeUpdate();
-             this.makeResponse(true, "Alter Success!", null);
+             this.makeResponse(true, "事件修改成功!", null);
         } catch (SQLException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {

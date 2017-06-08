@@ -96,7 +96,7 @@ public class UserServer extends Server{
             ResultSet rs1 = st1.executeQuery();
             rs1.next();
             if(rs1.getInt(1) == 1){
-                this.makeResponse(false, "Registe Failed!", null);
+                this.makeResponse(false, "用户已存在!", null);
             }else{
                 
                  String sql = "insert into sn_user(username,nickname,password) values (?,?,md5(?))";
@@ -110,9 +110,9 @@ public class UserServer extends Server{
                 
                  if(username.length() !=0 && nickname.length() != 0 && password.length() != 0){
                       int rs = st.executeUpdate();
-                      this.makeResponse(true,"Registe Success!",null);
+                      this.makeResponse(true,"注册成功!",null);
                  } else {
-                      this.makeResponse(false, "Can't be empty!", null);
+                      this.makeResponse(false, "用户名，昵称或密码不能为空!", null);
                  }
             }
           
@@ -151,9 +151,9 @@ public class UserServer extends Server{
         HttpSession session = request.getSession(true);
         Object curusername = session.getAttribute("HASLOGIN");
         if(curusername == null){
-            this.makeResponse(false, "Please Login First", null);
+            this.makeResponse(false, "请先登录!", null);
         } else {
-            this.makeResponse(true, "HASLOGIN", null);
+            this.makeResponse(true, "已登录成功!", null);
         }
        
        } 
@@ -194,7 +194,7 @@ public class UserServer extends Server{
             String count = rs1.getString("count");
             
             data.put("count", count);
-            this.makeResponse(true, "GetMessage Success!", data);
+            this.makeResponse(true, "获取个人信息成功!", data);
             
         } catch (SQLException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -226,7 +226,7 @@ public class UserServer extends Server{
              st.setString(6, data.getString("nickname"));
              st.setString(7, curusername);
              int rs = st.executeUpdate();
-             this.makeResponse(true, "Alter Success!", null);
+             this.makeResponse(true, "修改个人信息成功!", null);
         } catch (SQLException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {
@@ -238,10 +238,11 @@ public class UserServer extends Server{
          try{
             HttpSession session = request.getSession(false);
             String curusername = (String) session.getAttribute("HASLOGIN");
-            
-            String sql = "select happentime,title from sn_event where username = ? and label = true";
+            String sql = "select happentime,title,eventid from sn_event where username = ? and label = true order by happentime DESC limit 5 offset ?";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, curusername);
+            
+            st.setInt(2,data.getInt("param")*5);
             ResultSet rs = st.executeQuery();
 
             JSONArray array = new JSONArray(); 
@@ -252,13 +253,14 @@ public class UserServer extends Server{
             JSONObject data1 = new JSONObject();
             String happentime = rs.getString(1);
             String title = rs.getString(2);
+            String eventid = rs.getString(3);
 //            String longitude = rs.getString(3);
 //            String latitude = rs.getString(4);
             data1.put("happentime", happentime);
 //            data1.put("longitude", longitude);
 //            data1.put("latitude", latitude);
             data1.put("title", title);
-            
+            data1.put("eventid", eventid);
             
             array.put(data1);
             
