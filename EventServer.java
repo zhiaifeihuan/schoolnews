@@ -129,7 +129,7 @@ public class EventServer extends Server {
     
     private void eventinit(){
        try{
-           String sql = "select title,happentime,longitude,latitude,eventid from sn_event where happentime::varchar < ? and happentime::varchar > ?";
+           String sql = "select title,happentime,longitude,latitude,eventid from sn_event where happentime::varchar < ? and happentime::varchar > ? and label = true";
            PreparedStatement st = connection.prepareStatement(sql); 
            
 //           Timestamp time = Timestamp.valueOf(data.getString("happentime1"));
@@ -177,12 +177,19 @@ public class EventServer extends Server {
     
     private void delete(){
         try {
-             String sql = "update sn_event set label = false where eventid::varchar = ?";
+             HttpSession session = request.getSession(false);
+             String curusername = (String) session.getAttribute("HASLOGIN");
+             if (curusername.length()>0) {
+             String sql = "update sn_event set label = false where eventid::varchar = ? and username = ?";
          
              PreparedStatement st = connection.prepareStatement(sql);
              st.setString(1,data.getString("eventid"));
+             st.setString(2,curusername);
              int rs = st.executeUpdate();
-              this.makeResponse(true, "事件删除成功!",null);
+             this.makeResponse(true, "事件删除成功!",null);
+             } else {
+                 this.makeResponse(false, "事件删除失败!",null);
+             }
          } catch (SQLException ex) {
              Logger.getLogger(EventServer.class.getName()).log(Level.SEVERE, null, ex);
          } catch (JSONException ex) {
@@ -231,7 +238,7 @@ public class EventServer extends Server {
     private void getmessage(){
         try{
             
-            String sql = "select happentime,event,title,nickname,viewd from sn_event,sn_user where eventid::varchar = ? and sn_event.username = sn_user.username";
+            String sql = "select happentime,event,title,nickname,viewd from sn_event,sn_user where eventid::varchar = ? and sn_event.username = sn_user.username and label = true";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, data.getString("eventid"));
             ResultSet rs = st.executeQuery();

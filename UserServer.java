@@ -164,7 +164,7 @@ public class UserServer extends Server{
             HttpSession session = request.getSession(false);
             String curusername = (String) session.getAttribute("HASLOGIN");
             
-            String sql = "select gender,introduce,identity,major,phone,nickname from sn_user where username = ? ";
+            String sql = "select gender,introduce,identity,major,phone,nickname from sn_user where username = ? and label = true";
             PreparedStatement st = connection.prepareStatement(sql);
            
             st.setString(1, curusername);
@@ -184,7 +184,7 @@ public class UserServer extends Server{
             data.put("phone", phone);
             data.put("nickname", nickname);
             
-            String sql1 = "select count(*) from sn_event where username = ? ";
+            String sql1 = "select count(username) from sn_event where username = ? and label = true";
             PreparedStatement st1 = connection.prepareStatement(sql1);
              
             st1.setString(1, curusername);
@@ -238,7 +238,7 @@ public class UserServer extends Server{
          try{
             HttpSession session = request.getSession(false);
             String curusername = (String) session.getAttribute("HASLOGIN");
-            String sql = "select happentime,title,eventid from sn_event where username = ? and label = true order by happentime DESC limit 5 offset ?";
+            String sql = "select happentime,title,eventid,viewd from sn_event where username = ? and label = true order by happentime DESC limit 5 offset ?";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, curusername);
             
@@ -254,6 +254,7 @@ public class UserServer extends Server{
             String happentime = rs.getString(1);
             String title = rs.getString(2);
             String eventid = rs.getString(3);
+            String viewd = rs.getString(4);
 //            String longitude = rs.getString(3);
 //            String latitude = rs.getString(4);
             data1.put("happentime", happentime);
@@ -261,6 +262,7 @@ public class UserServer extends Server{
 //            data1.put("latitude", latitude);
             data1.put("title", title);
             data1.put("eventid", eventid);
+            data1.put("viewd", viewd);
             
             array.put(data1);
             
