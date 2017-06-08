@@ -2926,7 +2926,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       c: {
         x: 0,
-        y: 160
+        y: 180
       },
       start: { x: 0, y: 0 },
       width: '',
@@ -2941,7 +2941,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   computed: {
     contentPosition: function contentPosition() {
-      var dy = this.c.y - 160;
+      var dy = this.c.y - 180;
       var dampen = dy > 0 ? 2 : 4;
       return {
         transform: 'translate3d(0,' + dy / dampen + 'px,0)',
@@ -2952,7 +2952,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return this.$store.state.show_currentevent;
     },
     headerPath: function headerPath() {
-      return 'M0,0 L' + this.width + ',0 L' + this.width + ',160 ' + 'Q' + this.c.x + ',' + this.c.y + ' 0,160';
+      return 'M0,0 L' + this.width + ',0 L' + this.width + ',180 ' + 'Q' + this.c.x + ',' + this.c.y + ' 0,180';
     }
   },
   methods: {
@@ -2970,7 +2970,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         var dy = e.pageY - this.start.y;
         var dampen = dy > 0 ? 1.5 : 4;
-        this.c.y = 160 + dy / dampen;
+        this.c.y = 180 + dy / dampen;
         document.getElementById('content').scrollTop = this.current_scroll_top - dy;
       }
     },
@@ -2979,7 +2979,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.dragging = false;
         __WEBPACK_IMPORTED_MODULE_0_dynamics_js___default.a.animate(this.c, {
           x: this.width / 2,
-          y: 160
+          y: 180
         }, {
           type: __WEBPACK_IMPORTED_MODULE_0_dynamics_js___default.a.spring,
           duration: 700,
@@ -3315,6 +3315,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(215);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
+throw new Error("Cannot find module \"search\"");
+
 
 
 
@@ -3412,12 +3414,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       phone: '',
       nickname: '',
       count: '',
-      has_got_all: 'false',
+      has_got_all: false,
       get_event_by_index: 0,
       show_changebtn: false,
       got_events: [],
       show_events: false,
-      eventid_to_show: ''
+      eventid_to_show: '',
+      delete_btn_id: false,
+      close_deletebtn: false
     };
   },
   computed: {
@@ -3434,9 +3438,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
       } else if (type === 'USER_GETEVENT') {
         return {
-          index: this.get_event_by_index
+          param: this.get_event_by_index
         };
       } else if (type === 'EVENT_GETMESSAGE') {
+        return {
+          eventid: this.eventid_to_show
+        };
+      } else if (type === 'EVENT_DELETE') {
         return {
           eventid: this.eventid_to_show
         };
@@ -3519,6 +3527,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     show_hot: function show_hot() {
       var _this4 = this;
 
+      this.get_event_by_index = 0;
+      this.has_got_all = true;
       this.show_events = true;
       var a = this.$store;
       a.commit('set_ajax', {
@@ -3536,10 +3546,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     show_all: function show_all() {
       this.show_events = true;
+      this.has_got_all = false;
+      this.get_event_by_index = 0;
+      this.got_events = [];
       this.show_more();
     },
     show_more: function show_more() {
-      this.get_event_by_index = this.get_event_by_index + 1;
+      var _this5 = this;
+
       var a = this.$store;
       var that = this;
       a.commit('set_ajax', {
@@ -3562,7 +3576,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       });
       a.commit('ajax_data', this.ajax_data);
-      a.dispatch('ajax_start');
+      a.dispatch('ajax_start').then(function () {
+        _this5.get_event_by_index = _this5.get_event_by_index + 1;
+      }, function (error) {
+        console.log(error);
+      });
     },
     show_event: function show_event(event, item) {
       var a = this.$store;
@@ -3583,6 +3601,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }, function (error) {
         console.log(error);
       });
+    },
+    delete_event: function delete_event(event, item) {
+      var _this6 = this;
+
+      var a = this.$store;
+      a.commit('set_ajax', {
+        t: 'EVENT_DELETE',
+        s: function s(data) {
+          console.log(data);
+        },
+        f: function f(data) {
+          console.log(data);
+        }
+      });
+      this.eventid_to_show = item.eventid;
+      a.commit('ajax_data', this.ajax_data);
+      a.dispatch('ajax_start').then(function () {
+        _this6.show_all();
+      });
+    },
+    set_deletebtn_id: function set_deletebtn_id(item) {
+      this.delete_btn_id = item;
     }
   }
 });
@@ -4561,7 +4601,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "my-content"
   }, [_c('div', {
     staticClass: "info"
-  }, [_c('span', [_vm._v("昵称")]), _vm._v(" "), _c('input', {
+  }, [_c('span', {
+    staticClass: "spann"
+  }, [_vm._v("昵称")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -4584,7 +4626,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]), _vm._v(" "), _c('div', {
     staticClass: "info"
-  }, [_c('span', [_vm._v("性别")]), _vm._v(" "), _c('input', {
+  }, [_c('span', {
+    staticClass: "spann"
+  }, [_vm._v("性别")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -4607,7 +4651,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]), _vm._v(" "), _c('div', {
     staticClass: "info"
-  }, [_c('span', [_vm._v("专业")]), _vm._v(" "), _c('input', {
+  }, [_c('span', {
+    staticClass: "spann"
+  }, [_vm._v("专业")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -4630,7 +4676,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]), _vm._v(" "), _c('div', {
     staticClass: "info"
-  }, [_c('span', [_vm._v("身份")]), _vm._v(" "), _c('input', {
+  }, [_c('span', {
+    staticClass: "spann"
+  }, [_vm._v("身份")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -4653,7 +4701,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]), _vm._v(" "), _c('div', {
     staticClass: "info"
-  }, [_c('span', [_vm._v("电话")]), _vm._v(" "), _c('input', {
+  }, [_c('span', {
+    staticClass: "spann"
+  }, [_vm._v("电话")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -4676,7 +4726,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]), _vm._v(" "), _c('div', {
     staticClass: "info"
-  }, [_c('span', [_vm._v("简介")]), _vm._v(" "), _c('input', {
+  }, [_c('span', {
+    staticClass: "spann"
+  }, [_vm._v("简介")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -4717,19 +4769,54 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     return _c('a', {
       staticClass: "event-title",
       on: {
+        "mouseout": function($event) {
+          _vm.set_deletebtn_id(_vm.close_deletebtn)
+        },
+        "mouseover": function($event) {
+          _vm.set_deletebtn_id(item.eventid)
+        }
+      }
+    }, [_c('div', [_c('a', {
+      staticClass: "event-title-title",
+      on: {
         "click": function($event) {
           _vm.show_event($event, item)
         }
       }
-    }, [_vm._v(_vm._s(item.title))])
+    }, [_vm._v(" " + _vm._s(item.title) + " ")]), _vm._v(" "), _c('span', {
+      staticClass: "glyphicon glyphicon-eye-open",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    }), _vm._v("\n   " + _vm._s(item.viewd) + " "), _c('span', {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (item.eventid === _vm.delete_btn_id),
+        expression: "item.eventid === delete_btn_id"
+      }],
+      staticClass: "glyphicon glyphicon-remove text-danger",
+      staticStyle: {
+        "cursor": "default",
+        "display": "inline"
+      },
+      attrs: {
+        "aria-hidden": "true"
+      },
+      on: {
+        "click": function($event) {
+          _vm.delete_event($event, item)
+        }
+      }
+    })])])
   })), _vm._v(" "), _c('div', {
     staticClass: "show-more"
   }, [(!_vm.has_got_all) ? _c('button', {
-    staticClass: "btn btn-default",
+    staticClass: "btn btn-primary loadmore",
     on: {
       "click": _vm.show_more
     }
-  }, [_vm._v("查看更多")]) : _c('h3', [_vm._v("没有更多了。。。")])])])])
+  }, [_vm._v("查看更多")]) : _c('h3', [_vm._v("没有更多了.....")])])])])
 },staticRenderFns: []}
 
 /***/ }),
@@ -5077,4 +5164,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 },[161]);
-//# sourceMappingURL=app.1132c267dcf527bd93ae.js.map
+//# sourceMappingURL=app.84a564b9370e56f03cb8.js.map
