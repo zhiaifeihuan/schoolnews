@@ -89,15 +89,23 @@ public class UserServer extends Server{
     
     private void registe() {
         try{
-            String sql1 = "select count(1) from sn_user where username=? or nickname = ?";
+            String sql1 = "select count(1) from sn_user where username=? ";
             PreparedStatement st1 = connection.prepareStatement(sql1);
             st1.setString(1, data.getString("username"));
-            st1.setString(2, data.getString("nickname"));
+            //st1.setString(2, data.getString("nickname"));
             ResultSet rs1 = st1.executeQuery();
             rs1.next();
+            String sql2 = "select count(1) from sn_user where nickname=? ";
+            PreparedStatement st2 = connection.prepareStatement(sql2);
+            st2.setString(1, data.getString("nickname"));
+            //st1.setString(2, data.getString("nickname"));
+            ResultSet rs2 = st2.executeQuery();
+            rs2.next();
             if(rs1.getInt(1) == 1){
-                this.makeResponse(false, "用户已存在!", null);
-            }else{
+                this.makeResponse(false, "用户名已存在!", null);
+            }else if(rs2.getInt(1) == 1){
+                this.makeResponse(false, "昵称已存在!", null);
+            }{
                 
                  String sql = "insert into sn_user(username,nickname,password) values (?,?,md5(?))";
                  PreparedStatement st = connection.prepareStatement(sql);
@@ -164,7 +172,7 @@ public class UserServer extends Server{
             HttpSession session = request.getSession(false);
             String curusername = (String) session.getAttribute("HASLOGIN");
             
-            String sql = "select gender,introduce,identity,major,phone,nickname from sn_user where username = ? and label = true";
+            String sql = "select gender,introduce,identity,major,phone,nickname from sn_user where username = ? ";
             PreparedStatement st = connection.prepareStatement(sql);
            
             st.setString(1, curusername);
@@ -214,6 +222,14 @@ public class UserServer extends Server{
     
     private void alter(){
         try{
+             String sql1 ="select count(1) from sn_user where nickname=? ";
+             PreparedStatement st1 = connection.prepareStatement(sql1);
+             st1.setString(1, data.getString("nickname"));
+             ResultSet rs1 = st1.executeQuery();
+             rs1.next();
+             if(rs1.getInt(1) == 1){
+                this.makeResponse(false, "昵称已存在!", null);
+            }else{
              HttpSession session = request.getSession(false);
              String curusername = (String) session.getAttribute("HASLOGIN");
              String sql = "update sn_user set gender = ?,introduce = ?,identity = ?,major = ?,phone = ?,nickname = ? where username = ?";
@@ -227,6 +243,7 @@ public class UserServer extends Server{
              st.setString(7, curusername);
              int rs = st.executeUpdate();
              this.makeResponse(true, "修改个人信息成功!", null);
+             }
         } catch (SQLException ex) {
             Logger.getLogger(UserServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {
