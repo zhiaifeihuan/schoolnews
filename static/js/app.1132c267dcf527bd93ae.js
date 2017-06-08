@@ -3412,7 +3412,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       phone: '',
       nickname: '',
       count: '',
-      show_changebtn: false
+      has_got_all: 'false',
+      get_event_by_index: 0,
+      show_changebtn: false,
+      got_events: [],
+      show_events: false,
+      eventid_to_show: ''
     };
   },
   computed: {
@@ -3427,8 +3432,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           phone: this.phone,
           nickname: this.nickname
         };
-      } else if (type === 'USER_GETMESSAGE') {
-        return {};
+      } else if (type === 'USER_GETEVENT') {
+        return {
+          index: this.get_event_by_index
+        };
+      } else if (type === 'EVENT_GETMESSAGE') {
+        return {
+          eventid: this.eventid_to_show
+        };
       } else {
         return {};
       }
@@ -3506,11 +3517,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$store.state.show_login = true;
     },
     show_hot: function show_hot() {
+      var _this4 = this;
+
+      this.show_events = true;
       var a = this.$store;
       a.commit('set_ajax', {
         t: 'EVENT_GETHOTMESSAGE',
         s: function s(data) {
-          console.log(data);
+          _this4.got_events = data.data;
+          console.log(_this4.got_events);
         },
         f: function f(data) {
           console.log(data);
@@ -3520,11 +3535,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       a.dispatch('ajax_start');
     },
     show_all: function show_all() {
+      this.show_events = true;
+      this.show_more();
+    },
+    show_more: function show_more() {
+      this.get_event_by_index = this.get_event_by_index + 1;
       var a = this.$store;
+      var that = this;
       a.commit('set_ajax', {
         t: 'USER_GETEVENT',
         s: function s(data) {
           console.log(data);
+          var events = data.data;
+          if (events.length < 5) {
+            that.has_got_all = true;
+          }
+          for (var key in events) {
+            if (events.hasOwnProperty(key)) {
+              var element = events[key];
+              that.got_events.push(element);
+            }
+          }
         },
         f: function f(data) {
           console.log(data);
@@ -3532,6 +3563,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
       a.commit('ajax_data', this.ajax_data);
       a.dispatch('ajax_start');
+    },
+    show_event: function show_event(event, item) {
+      var a = this.$store;
+      a.commit('set_ajax', {
+        t: 'EVENT_GETMESSAGE',
+        s: function s(data) {
+          a.commit('set_current_event', data.data);
+          a.state.show_currentevent = !a.state.show_currentevent;
+        },
+        f: function f(data) {
+          console.log(data);
+        }
+      });
+      this.eventid_to_show = item.eventid;
+      a.commit('ajax_data', this.ajax_data);
+      a.dispatch('ajax_start').then(function (data) {
+        console.log(data, 'success');
+      }, function (error) {
+        console.log(error);
+      });
     }
   }
 });
@@ -4470,7 +4521,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "src": __webpack_require__(219)
     }
   }), _vm._v(" "), (_vm.haslogin) ? _c('h2', {
-    staticClass: "text-center"
+    staticClass: "text-center",
+    on: {
+      "click": function($event) {
+        _vm.show_events = !_vm.show_events
+      }
+    }
   }, [_vm._v("你好 " + _vm._s(_vm.nickname))]) : _c('h2', {
     staticClass: "text-center",
     attrs: {
@@ -4501,13 +4557,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('p', {
     staticClass: "p-1"
-  }, [_vm._v(_vm._s(_vm.count_2))]), _vm._v("\n    被看最多\n  ")])]), _vm._v(" "), _c('div', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: (_vm.haslogin),
-      expression: "haslogin"
-    }],
+  }, [_vm._v(_vm._s(_vm.count_2))]), _vm._v("\n    被看最多\n  ")])]), _vm._v(" "), (_vm.haslogin && !_vm.show_events) ? _c('div', {
     staticClass: "my-content"
   }, [_c('div', {
     staticClass: "info"
@@ -4658,7 +4708,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.set_userinfo
     }
-  }, [_vm._v("修改")])])])
+  }, [_vm._v("修改")])]) : _c('div', [_c('div', {
+    staticClass: "my-content",
+    attrs: {
+      "id": "userinfo-events"
+    }
+  }, _vm._l((_vm.got_events), function(item) {
+    return _c('a', {
+      staticClass: "event-title",
+      on: {
+        "click": function($event) {
+          _vm.show_event($event, item)
+        }
+      }
+    }, [_vm._v(_vm._s(item.title))])
+  })), _vm._v(" "), _c('div', {
+    staticClass: "show-more"
+  }, [(!_vm.has_got_all) ? _c('button', {
+    staticClass: "btn btn-default",
+    on: {
+      "click": _vm.show_more
+    }
+  }, [_vm._v("查看更多")]) : _c('h3', [_vm._v("没有更多了。。。")])])])])
 },staticRenderFns: []}
 
 /***/ }),
@@ -4946,6 +5017,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "show_currentevent"
     }],
     staticClass: "zhezhao",
+    attrs: {
+      "id": "event-zhezhao"
+    },
     on: {
       "click": _vm.show_event
     }
@@ -4960,7 +5034,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       value: (_vm.show_currentevent),
       expression: "show_currentevent"
     }],
-    staticClass: "left-side",
+    staticClass: "event-main",
     attrs: {
       "rel": "event"
     }
@@ -5003,4 +5077,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 },[161]);
-//# sourceMappingURL=app.ff79e9a76d60420b484c.js.map
+//# sourceMappingURL=app.1132c267dcf527bd93ae.js.map
