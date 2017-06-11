@@ -35,6 +35,9 @@ export default {
       current_scroll_top: 0
     }
   },
+  created: function () {
+    this.width = this.c.x = 800 // 防止初始化的时候弹出不存在headerpath的警告
+  },
   watch: {
     show_currentevent: function () {
       this.width = this.$parent.$el.lastChild.offsetWidth // 一顿骚操作，总算得到了rel='event'背景的宽度

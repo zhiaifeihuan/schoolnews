@@ -116,7 +116,6 @@ export default {
       this.$store.commit('set_ajax', {
         t: 'USER_REGISTE',
         s: (data) => {
-          console.log(data)
           this.$swal(data.message).then((data) => {
             this.$store.state.show_login = false
             this.$store.dispatch('checklogin')

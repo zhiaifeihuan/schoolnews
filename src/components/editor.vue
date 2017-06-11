@@ -85,7 +85,6 @@
                 that.$store.commit('set_ajax', {
                   t: 'EVENT_UPLOAD',
                   s: (data) => {
-                    console.log(data)
                   },
                   f: (data) => {
                     console.log(data)

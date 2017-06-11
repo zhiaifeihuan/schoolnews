@@ -58,13 +58,11 @@ export default {
       this.eventid_to_show = item.eventid
       a.commit('ajax_data', this.ajax_data)
       a.dispatch('ajax_start').then((data) => {
-        console.log(data, 'success')
       }, (error) => {
         console.log(error)
       })
     },
     choose_item (currenteventid) {
-      console.log(currenteventid)
       this.item_be_chosen = currenteventid
     }
   }

@@ -169,7 +169,6 @@ export default {
         t: 'EVENT_GETHOTMESSAGE',
         s: (data) => {
           this.got_events = data.data
-          console.log(this.got_events)
         },
         f: (data) => {
           console.log(data)
@@ -191,7 +190,6 @@ export default {
       a.commit('set_ajax', {
         t: 'USER_GETEVENT',
         s: (data) => {
-          console.log(data)
           const events = data.data
           if (events.length < 5) {
             that.has_got_all = true
@@ -228,18 +226,13 @@ export default {
       })
       this.eventid_to_show = item.eventid
       a.commit('ajax_data', this.ajax_data)
-      a.dispatch('ajax_start').then((data) => {
-        console.log(data, 'success')
-      }, (error) => {
-        console.log(error)
-      })
+      a.dispatch('ajax_start')
     },
     delete_event (event, item) {
       const a = this.$store
       a.commit('set_ajax', {
         t: 'EVENT_DELETE',
         s: (data) => {
-          console.log(data)
         },
         f: (data) => {
           console.log(data)

@@ -218,7 +218,6 @@
             text: '请在下面的地图中选取事件发生的地点',
             confirmButtonText: '去选取'
           }]).then((data) => {
-            console.log(data)
             this.centerlabel = true
             this.event_title = data[0]
             setTimeout(() => {
@@ -236,7 +235,6 @@
         }
       },
       get_pos (event) {
-        console.log(event.point)
         this.$router.push({
           name: 'edit', // 只能用name来传params，如果用path数据就传不过去  也不知道为什么。
           params: {
@@ -270,7 +268,6 @@
         this.eventid_to_show = item.eventid
         a.commit('ajax_data', this.ajax_data)
         a.dispatch('ajax_start').then((data) => {
-          console.log(data, 'success')
         }, (error) => {
           console.log(error)
         })
