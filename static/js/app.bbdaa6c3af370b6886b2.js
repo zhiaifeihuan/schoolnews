@@ -2801,9 +2801,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return new __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_promise___default.a(function (resolve, reject) {
               that.$store.commit('set_ajax', {
                 t: 'EVENT_UPLOAD',
-                s: function s(data) {
-                  console.log(data);
-                },
+                s: function s(data) {},
                 f: function f(data) {
                   console.log(data);
                 }
@@ -2951,6 +2949,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       current_scroll_top: 0
     };
   },
+  created: function created() {
+    this.width = this.c.x = 800;
+  },
   watch: {
     show_currentevent: function show_currentevent() {
       this.width = this.$parent.$el.lastChild.offsetWidth;
@@ -3093,7 +3094,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$store.commit('set_ajax', {
         t: 'USER_REGISTE',
         s: function s(data) {
-          console.log(data);
           _this2.$swal(data.message).then(function (data) {
             _this2.$store.state.show_login = false;
             _this2.$store.dispatch('checklogin');
@@ -3176,7 +3176,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (type === 'EVENT_INIT') {
         return {
           happentime1: '2000-01-01',
-          happentime2: '2017-07-01'
+          happentime2: '2099-01-01'
         };
       } else if (type === 'EVENT_GETMESSAGE') {
         return {
@@ -3269,7 +3269,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           text: '请在下面的地图中选取事件发生的地点',
           confirmButtonText: '去选取'
         }]).then(function (data) {
-          console.log(data);
           _this3.centerlabel = true;
           _this3.event_title = data[0];
           setTimeout(function () {
@@ -3287,7 +3286,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     get_pos: function get_pos(event) {
-      console.log(event.point);
       this.$router.push({
         name: 'edit',
         params: {
@@ -3313,9 +3311,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
       this.eventid_to_show = item.eventid;
       a.commit('ajax_data', this.ajax_data);
-      a.dispatch('ajax_start').then(function (data) {
-        console.log(data, 'success');
-      }, function (error) {
+      a.dispatch('ajax_start').then(function (data) {}, function (error) {
         console.log(error);
       });
     },
@@ -3463,9 +3459,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return {
         left: this.left + 'px',
         top: this.top + 'px',
-        borderBottom: this.events.length ? 'thin solid' : 'white',
-        borderLeft: this.events.length ? 'thin solid' : 'white',
-        borderRight: this.events.length ? 'thin solid' : 'white'
+        borderBottom: this.events.length ? 'thin solid' : '',
+        borderLeft: this.events.length ? 'thin solid' : '',
+        borderRight: this.events.length ? 'thin solid' : ''
       };
     },
     ajax_data: function ajax_data() {
@@ -3492,14 +3488,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
       this.eventid_to_show = item.eventid;
       a.commit('ajax_data', this.ajax_data);
-      a.dispatch('ajax_start').then(function (data) {
-        console.log(data, 'success');
-      }, function (error) {
+      a.dispatch('ajax_start').then(function (data) {}, function (error) {
         console.log(error);
       });
     },
     choose_item: function choose_item(currenteventid) {
-      console.log(currenteventid);
       this.item_be_chosen = currenteventid;
     }
   }
@@ -3645,7 +3638,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         t: 'EVENT_GETHOTMESSAGE',
         s: function s(data) {
           _this4.got_events = data.data;
-          console.log(_this4.got_events);
         },
         f: function f(data) {
           console.log(data);
@@ -3669,7 +3661,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       a.commit('set_ajax', {
         t: 'USER_GETEVENT',
         s: function s(data) {
-          console.log(data);
           var events = data.data;
           if (events.length < 5) {
             that.has_got_all = true;
@@ -3706,11 +3697,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
       this.eventid_to_show = item.eventid;
       a.commit('ajax_data', this.ajax_data);
-      a.dispatch('ajax_start').then(function (data) {
-        console.log(data, 'success');
-      }, function (error) {
-        console.log(error);
-      });
+      a.dispatch('ajax_start');
     },
     delete_event: function delete_event(event, item) {
       var _this6 = this;
@@ -3718,9 +3705,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var a = this.$store;
       a.commit('set_ajax', {
         t: 'EVENT_DELETE',
-        s: function s(data) {
-          console.log(data);
-        },
+        s: function s(data) {},
         f: function f(data) {
           console.log(data);
         }
@@ -5358,4 +5343,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 },[161]);
-//# sourceMappingURL=app.395a78903032f24c2fa6.js.map
+//# sourceMappingURL=app.bbdaa6c3af370b6886b2.js.map
